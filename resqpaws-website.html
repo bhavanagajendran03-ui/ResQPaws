@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ResQPaws – AI-Powered Animal Rescue &amp; Care Platform</title>
+<meta name="description" content="ResQPaws is an AI-powered platform for animal rescue, pet care, and adoption.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{
+  --bg:#F3F9FC; --surface:#FFFFFF; --surface-2:#EEF6FB; --ink:#16324A; --muted:#4F677B; --line:#D5E5EF;
+  --blue:#21689C; --green:#267A59; --on-btn:#FFFFFF;
+  --sky:#DDEEF9; --sky-ink:#21689C; --mint:#DDF3E8; --mint-ink:#1E6B4E;
+  --amber-bg:#FFF0D2; --amber-ink:#8A5A0B;
+  --panel:#1B4F78; --footer:#123049; --footer-ink:#C9DDEC;
+  --shadow:0 1px 2px rgba(22,50,74,.06),0 14px 34px -18px rgba(33,104,156,.35);
+  --blob:#CFE8F8; --cloud:#FFFFFF; --hill1:#A8DDBF; --hill2:#7CCBA3;
+  --font-display:"Fredoka",ui-rounded,"Hiragino Maru Gothic ProN","Segoe UI",system-ui,sans-serif;
+  --font-body:"Nunito",ui-rounded,"Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1E2D; --surface:#142B40; --surface-2:#0F2436; --ink:#E9F4FB; --muted:#A8C0D3; --line:#24425B;
+    --blue:#8CC8F2; --green:#7FD6AC; --on-btn:#0D1E2D;
+    --sky:#1B3F5C; --sky-ink:#8CC8F2; --mint:#163E31; --mint-ink:#86DDB2;
+    --amber-bg:#3F3213; --amber-ink:#F3C46B;
+    --panel:#17405F; --footer:#08141F; --footer-ink:#B5CDDF;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -18px rgba(0,0,0,.6);
+    --blob:#1D4463; --cloud:#2B5679; --hill1:#2F7A5C; --hill2:#256B50;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1E2D; --surface:#142B40; --surface-2:#0F2436; --ink:#E9F4FB; --muted:#A8C0D3; --line:#24425B;
+  --blue:#8CC8F2; --green:#7FD6AC; --on-btn:#0D1E2D;
+  --sky:#1B3F5C; --sky-ink:#8CC8F2; --mint:#163E31; --mint-ink:#86DDB2;
+  --amber-bg:#3F3213; --amber-ink:#F3C46B;
+  --panel:#17405F; --footer:#08141F; --footer-ink:#B5CDDF;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -18px rgba(0,0,0,.6);
+  --blob:#1D4463; --cloud:#2B5679; --hill1:#2F7A5C; --hill2:#256B50;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;margin:0;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+img,svg{max-width:100%}
+.wrap{width:100%;max-width:1160px;margin-inline:auto;padding-inline:clamp(16px,4vw,32px)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
+.skip{position:absolute;left:12px;top:-60px;background:var(--surface);color:var(--ink);padding:10px 16px;border-radius:999px;z-index:100;box-shadow:var(--shadow)}
+.skip:focus{top:12px}
+section[id]{scroll-margin-top:84px}
+.ic{width:1.35em;height:1.35em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.paw{fill:currentColor}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 24px;border-radius:999px;border:2px solid transparent;font:700 1rem/1 var(--font-body);text-decoration:none;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--green);color:var(--on-btn);box-shadow:0 10px 22px -12px var(--green)}
+.btn-primary:hover{box-shadow:0 14px 26px -12px var(--green)}
+.btn-secondary{background:var(--surface);color:var(--blue);border-color:var(--blue)}
+.btn-secondary:hover{background:var(--sky)}
+.btn-sm{min-height:42px;padding:0 18px}
+
+/* Header */
+.site-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:10px;min-height:68px;flex-wrap:wrap}
+.lang-switch{display:flex;align-items:center;gap:6px;padding:6px 10px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted);font-weight:700;font-size:.85rem}
+.lang-switch select{border:0;background:transparent;color:var(--ink);font:700 .85rem var(--font-body)}
+@media(min-width:900px){#nav ul{flex-wrap:wrap;row-gap:2px}}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:600 1.45rem/1 var(--font-display);margin-right:auto}
+.brand-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:var(--green);color:var(--on-btn)}
+.brand-mark .paw{width:22px;height:22px}
+.menu-btn{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+#nav{order:5;width:100%;display:none;padding-bottom:12px}
+#nav.open{display:block}
+#nav ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+#nav a{display:block;padding:12px 16px;border-radius:14px;text-decoration:none;font-weight:700;color:var(--muted);transition:background-color .15s,color .15s}
+#nav a:hover{background:var(--sky);color:var(--sky-ink)}
+#nav a[aria-current="page"]{background:var(--sky);color:var(--sky-ink)}
+@media(min-width:900px){
+  #nav{display:block;order:0;width:auto;padding:0;margin-inline:auto}
+  #nav ul{display:flex;gap:4px}
+  #nav a{padding:10px 16px}
+  .menu-btn{display:none}
+  .brand{margin-right:0}
+}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding-block:clamp(36px,6vw,72px) clamp(24px,4vw,48px)}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--sky) 0%,var(--bg) 100%);opacity:.75;z-index:0}
+.hero-grid{position:relative;z-index:1;display:grid;gap:32px;align-items:center}
+@media(min-width:900px){.hero-grid{grid-template-columns:1.02fr .98fr;gap:40px}}
+.hero h1{font-size:clamp(2.5rem,7vw,4.4rem);font-weight:700;line-height:1.02}
+.hero .sub{margin-top:18px;font-size:clamp(1.1rem,2.2vw,1.35rem);color:var(--muted);max-width:32ch}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+.deco-paw{position:absolute;color:var(--blue);opacity:.07;pointer-events:none;z-index:0}
+.scene{position:relative;justify-self:center;width:100%;max-width:560px}
+.scene svg{display:block;width:100%;height:auto}
+.blob{fill:var(--blob)} .cloud{fill:var(--cloud)} .hill1{fill:var(--hill1)} .hill2{fill:var(--hill2)}
+.chip{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);font-size:.875rem;line-height:1.3}
+.chip strong{display:block;font-weight:800}
+.chip span.t{color:var(--muted)}
+.chip .dot{display:grid;place-items:center;width:34px;height:34px;border-radius:12px;background:var(--mint);color:var(--mint-ink)}
+.chip.c1{left:0;top:6%}
+.chip.c2{right:0;bottom:4%}
+.chip.c2 .dot{background:var(--amber-bg);color:var(--amber-ink)}
+@media(max-width:520px){.chip.c2{display:none}.chip.c1{top:0}}
+
+/* Paw trail */
+.trail{position:relative;height:64px;overflow:hidden;color:var(--blue)}
+.trail span{position:absolute;width:clamp(20px,3vw,32px);height:clamp(20px,3vw,32px);opacity:.55}
+.trail svg{width:100%;height:100%;display:block}
+.js .trail span{opacity:0}
+.js .trail.go span{animation:pawIn .5s ease forwards;animation-delay:calc(var(--i) * 110ms)}
+@keyframes pawIn{from{opacity:0;transform:var(--t) scale(.5)}to{opacity:.55;transform:var(--t) scale(1)}}
+
+/* Sections */
+.section{padding-block:clamp(40px,6vw,76px)}
+.section-head{margin-bottom:28px;max-width:60ch}
+.section-head h2{font-size:clamp(1.8rem,4.2vw,2.6rem)}
+.section-head p{margin-top:10px;color:var(--muted)}
+.head-row{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:28px}
+.head-row .section-head{margin:0}
+
+/* Assistant */
+.assistant{display:grid;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:32px;box-shadow:var(--shadow);overflow:hidden}
+@media(min-width:900px){.assistant{grid-template-columns:5fr 7fr}}
+.a-info{padding:clamp(24px,4vw,44px);background:var(--mint);color:var(--ink)}
+.a-badge{display:grid;place-items:center;width:64px;height:64px;border-radius:22px;background:var(--green);color:var(--on-btn);margin-bottom:20px}
+.a-badge .ic{width:32px;height:32px}
+.a-info h2{font-size:clamp(1.7rem,3.6vw,2.3rem)}
+.a-info p{margin-top:12px;max-width:44ch}
+.topics{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0;padding:0;list-style:none}
+.topics li{padding:6px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:.9rem}
+.a-chat{padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:14px}
+.chat-log{height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--surface-2);border-radius:22px}
+.msg{display:flex;gap:10px;max-width:88%}
+.msg p{padding:12px 16px;border-radius:20px;font-size:.98rem;line-height:1.5}
+.msg.bot p{background:var(--surface);border:1px solid var(--line);border-top-left-radius:6px}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg.user p{background:var(--blue);color:var(--on-btn);border-top-right-radius:6px}
+.msg .av{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:12px;background:var(--green);color:var(--on-btn)}
+.msg .av .paw{width:16px;height:16px}
+.typing p{display:flex;gap:5px;align-items:center;padding:16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.suggest{display:flex;flex-wrap:wrap;gap:8px}
+.suggest button{padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:700 .875rem var(--font-body);cursor:pointer;transition:background-color .15s,border-color .15s}
+.suggest button:hover{background:var(--sky);border-color:var(--blue)}
+.ask{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 20px;background:var(--surface);border:2px solid var(--line);border-radius:999px;transition:border-color .15s,box-shadow .15s}
+.ask:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 20%,transparent)}
+.ask input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:600 1rem var(--font-body);padding:10px 0;outline:none}
+.ask input::placeholder{color:var(--muted);opacity:1}
+.round{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;flex:none;transition:transform .15s,background-color .15s}
+.round:hover{transform:scale(1.06)}
+.mic{background:var(--sky);color:var(--sky-ink)}
+.mic[aria-pressed="true"]{background:#C2412D;color:#fff;animation:pulse 1.2s infinite}
+.send{background:var(--green);color:var(--on-btn)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(194,65,45,.5)}100%{box-shadow:0 0 0 14px rgba(194,65,45,0)}}
+.fine{font-size:.85rem;color:var(--muted)}
+
+/* Quick access */
+.qgrid{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:640px){.qgrid{grid-template-columns:repeat(2,1fr)}.qgrid .qcard:last-child{grid-column:1/-1}}
+@media(min-width:960px){
+  .qgrid{grid-template-columns:repeat(6,1fr)}
+  .qgrid .qcard{grid-column:span 2}
+  .qgrid .qcard:nth-child(n+4){grid-column:span 3}
+}
+.qcard{position:relative;display:flex;flex-direction:column;gap:14px;padding:26px;background:var(--surface);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);text-decoration:none;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.qcard:hover{transform:translateY(-6px);border-color:var(--blue);box-shadow:0 22px 40px -20px rgba(33,104,156,.5)}
+.qcard h3{font-size:1.4rem}
+.qcard p{color:var(--muted);max-width:42ch}
+.tile{display:grid;place-items:center;width:60px;height:60px;border-radius:20px}
+.tile .ic{width:30px;height:30px}
+.t-blue{background:var(--sky);color:var(--sky-ink)}
+.t-green{background:var(--mint);color:var(--mint-ink)}
+.t-amber{background:var(--amber-bg);color:var(--amber-ink)}
+.go-arrow{position:absolute;top:24px;right:24px;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--surface-2);color:var(--muted);transition:background-color .2s,color .2s,transform .2s}
+.qcard:hover .go-arrow{background:var(--blue);color:var(--on-btn);transform:rotate(-45deg)}
+.wave line{transform-box:fill-box;transform-origin:center}
+.qcard:hover .wave line{animation:bar .8s ease-in-out infinite alternate}
+.qcard:hover .wave line:nth-child(2n){animation-delay:.15s}
+.qcard:hover .wave line:nth-child(3n){animation-delay:.3s}
+@keyframes bar{from{transform:scaleY(.55)}to{transform:scaleY(1.25)}}
+
+/* Stats */
+.panel{position:relative;overflow:hidden;background:var(--panel);color:#fff;border-radius:36px;padding:clamp(24px,4vw,48px)}
+.panel h2{font-size:clamp(1.6rem,3.6vw,2.2rem);max-width:22ch}
+.panel .bgpaw{position:absolute;right:-30px;top:-30px;width:190px;height:190px;color:#fff;opacity:.06}
+.stats{position:relative;display:grid;gap:14px;margin-top:28px;grid-template-columns:1fr 1fr}
+@media(min-width:900px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{padding:20px;border-radius:24px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18)}
+.stat .ic{width:28px;height:28px;color:#9FE0C0}
+.stat .num{display:block;margin-top:14px;font:700 clamp(1.9rem,4.5vw,2.8rem)/1 var(--font-display)}
+.stat .lbl{display:block;margin-top:6px;color:#D3E7F5;font-weight:600;font-size:.95rem;line-height:1.35}
+
+/* Featured animals */
+.agrid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr))}
+.acard{background:var(--surface);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);transition:transform .22s ease,box-shadow .22s ease}
+.acard:hover{transform:translateY(-6px);box-shadow:0 22px 40px -20px rgba(33,104,156,.5)}
+.ph{position:relative;display:flex;align-items:flex-end;justify-content:center;height:210px;overflow:hidden}
+.ph.bg-sky{background:var(--sky)} .ph.bg-mint{background:var(--mint)}
+.ph svg{height:92%;width:auto}
+.ph .pawbg{position:absolute;left:14px;top:14px;width:46px;height:46px;color:var(--ink);opacity:.06}
+.fav{position:absolute;top:12px;right:12px;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:0;background:var(--surface);color:var(--muted);cursor:pointer;box-shadow:var(--shadow);transition:transform .15s,color .15s}
+.fav:hover{transform:scale(1.1)}
+.fav[aria-pressed="true"]{color:#D6455D}
+.fav[aria-pressed="true"] .ic{fill:currentColor}
+.abody{padding:20px 22px 22px;display:flex;flex-direction:column;gap:12px}
+.arow{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.abody h3{font-size:1.4rem}
+.meta{color:var(--muted);font-size:.95rem}
+.badge{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;padding:5px 12px;border-radius:999px;font-weight:800;font-size:.82rem}
+.badge::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.b-avail{background:var(--mint);color:var(--mint-ink)}
+.b-pend{background:var(--amber-bg);color:var(--amber-ink)}
+.b-foster{background:var(--sky);color:var(--sky-ink)}
+.acard .btn{width:100%}
+
+/* Footer */
+footer{margin-top:clamp(40px,6vw,76px);background:var(--footer);color:var(--footer-ink);padding-block:48px 28px}
+.f-grid{display:grid;gap:32px}
+@media(min-width:800px){.f-grid{grid-template-columns:1.6fr 1fr}}
+footer .brand{color:#fff}
+footer .brand-mark{background:#3FA37A;color:#0D1E2D}
+footer p.blurb{margin-top:14px;max-width:38ch}
+footer h2{font-size:1.05rem;color:#fff;margin-bottom:12px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+footer a{text-decoration:none}
+footer ul a:hover{color:#fff;text-decoration:underline}
+footer :focus-visible{outline-color:#9FE0C0}
+.copy{margin-top:36px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);font-size:.92rem}
+
+/* Login dialog + toast */
+dialog{border:0;border-radius:28px;padding:0;background:var(--surface);color:var(--ink);box-shadow:0 30px 60px -20px rgba(0,0,0,.5);width:min(92vw,400px)}
+dialog::backdrop{background:rgba(13,30,45,.55)}
+.dlg{padding:28px;display:grid;gap:16px}
+.dlg h2{font-size:1.6rem}
+.field{display:grid;gap:6px;font-weight:700;font-size:.95rem}
+.field input{min-height:48px;padding:0 16px;border-radius:16px;border:2px solid var(--line);background:var(--surface-2);color:var(--ink);font:600 1rem var(--font-body)}
+.field input:focus{outline:none;border-color:var(--blue)}
+.dlg .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:200;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:999px;font-weight:700;font-size:.95rem;max-width:90vw;text-align:center;transition:opacity .25s,transform .25s}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ===== Regional Support ===== */
+.filterbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:16px;margin-bottom:20px}
+.filterbar .field{min-width:150px;flex:1 1 150px;display:grid;gap:4px;font-size:.85rem;font-weight:700;color:var(--ink)}
+.filterbar select,.filterbar input[type="text"]{min-height:44px;padding:0 12px;border-radius:14px;border:2px solid var(--line);background:var(--surface-2);color:var(--ink);font:600 .95rem var(--font-body);width:100%}
+.filterbar select:focus,.filterbar input:focus{outline:none;border-color:var(--blue)}
+.geo-btn{flex:0 0 auto}
+.centerlist{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.center-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);display:grid;gap:8px}
+.center-card h3{font-size:1.15rem;margin:0}
+.center-card .kind{display:inline-flex;align-self:start;padding:3px 10px;border-radius:999px;font-size:.75rem;font-weight:800}
+.center-card .dist{font-weight:800;color:var(--blue)}
+.center-card .row2{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+
+/* ---------- Inner screens ---------- */
+[hidden]{display:none!important}
+:root{--red-bg:#FCE3DF;--red-ink:#9B2C1F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--red-bg:#4A1F1B;--red-ink:#FFB4A8}}
+:root[data-theme="dark"]{--red-bg:#4A1F1B;--red-ink:#FFB4A8}
+
+.view{padding-block:clamp(20px,4vw,44px) 24px}
+.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:800;color:var(--blue);padding:8px 16px 8px 10px;border-radius:999px;transition:background-color .15s}
+.back:hover{background:var(--sky)}
+.vhead{display:flex;gap:16px;align-items:center;margin:14px 0 28px}
+.vhead h1{font-size:clamp(2rem,5vw,3rem);outline:none}
+.vhead p{color:var(--muted);max-width:54ch;margin-top:6px}
+.vgrid{display:grid;gap:20px}
+@media(min-width:960px){
+  .vgrid.two{grid-template-columns:350px 1fr;align-items:start}
+  .vgrid.even{grid-template-columns:1fr 1fr;align-items:start}
+}
+.vcard{background:var(--surface);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:clamp(20px,3vw,30px)}
+.vcard h2{font-size:1.4rem;margin-bottom:6px}
+.vcard>.meta{margin-bottom:16px}
+.stack{display:grid;gap:14px}
+.stack-lg{display:grid;gap:20px}
+.field select,.field textarea{border:2px solid var(--line);background:var(--surface-2);color:var(--ink);font:600 1rem var(--font-body);border-radius:16px;width:100%}
+.field select{min-height:48px;padding:0 12px}
+.field textarea{min-height:110px;padding:12px 16px;resize:vertical}
+.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue)}
+.field input{width:100%}
+.frow{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+.b-over{background:var(--red-bg);color:var(--red-ink)}
+.pf-art{display:flex;align-items:flex-end;justify-content:center;height:190px;border-radius:22px;background:var(--sky);overflow:hidden;margin-bottom:18px}
+.pf-art svg{height:94%;width:auto}
+.pf-name{font-size:1.8rem}
+
+/* Daily tracker */
+.tracks{display:grid;gap:14px}
+@media(min-width:640px){.tracks{grid-template-columns:repeat(3,1fr)}}
+.track{padding:16px;border-radius:22px;background:var(--surface-2);border:1px solid var(--line);display:grid;gap:10px}
+.track .top{display:flex;align-items:center;gap:10px;font-weight:800}
+.track .top .ic,.track .top .paw{width:22px;height:22px;color:var(--sky-ink)}
+.track .count{font:700 1.6rem/1 var(--font-display)}
+.meter{height:10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--green);border-radius:999px;transition:width .3s ease}
+.step{display:flex;gap:8px}
+.step button{flex:1;min-height:40px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:800 1.1rem var(--font-body);cursor:pointer;transition:background-color .15s,border-color .15s}
+.step button:hover{background:var(--sky);border-color:var(--blue)}
+
+/* Reminders */
+.next{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:18px;background:var(--mint);color:var(--ink);font-weight:700;margin-bottom:14px}
+.next .ic{color:var(--mint-ink)}
+.rlist,.vlist,.clist,.replist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rrow{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:20px;background:var(--surface-2)}
+.rrow .ico{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:var(--sky);color:var(--sky-ink)}
+.rrow .ico .paw{width:20px;height:20px}
+.rrow .lbl{font-weight:800}
+.rrow input[type=time]{min-height:40px;padding:0 10px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:700 .95rem var(--font-body)}
+.icon-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--muted);cursor:pointer;transition:background-color .15s,color .15s}
+.icon-btn:hover{background:var(--red-bg);color:var(--red-ink)}
+.switch{position:relative;display:inline-block;width:48px;height:28px}
+.switch input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:2}
+.switch span{position:absolute;inset:0;border-radius:999px;background:var(--line);transition:background-color .2s}
+.switch span::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.switch input:checked+span{background:var(--green)}
+.switch input:checked+span::after{transform:translateX(20px)}
+.switch input:focus-visible+span{outline:3px solid var(--blue);outline-offset:3px}
+.addrow{display:grid;gap:10px;grid-template-columns:1fr 1fr auto;align-items:end;margin-top:16px;padding-top:16px;border-top:1px dashed var(--line)}
+@media(max-width:560px){.addrow{grid-template-columns:1fr 1fr}.addrow .btn{grid-column:1/-1}.rrow{grid-template-columns:auto 1fr auto auto}.rrow .lbl{grid-column:2}.rrow input[type=time]{grid-column:2}.rrow .switch{grid-column:3;grid-row:1}.rrow .icon-btn{grid-column:4;grid-row:1}}
+
+/* Vaccines */
+.vrow{display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:20px;background:var(--surface-2)}
+.vrow strong{display:block;font-size:1.05rem}
+.vrow .meta{font-size:.9rem}
+.vrow .due{font-weight:700;font-size:.92rem}
+.vrow .btn{grid-column:1/-1}
+@media(min-width:640px){.vrow{grid-template-columns:1fr auto auto;}.vrow .btn{grid-column:auto}}
+
+/* Filters */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:22px}
+.filters button{padding:9px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:800 .92rem var(--font-body);cursor:pointer;transition:background-color .15s,border-color .15s}
+.filters button:hover{background:var(--sky)}
+.filters button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:var(--on-btn)}
+.check{display:inline-flex;align-items:center;gap:8px;font-weight:700;margin-left:auto;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--green)}
+.acard .btn[disabled]{opacity:.6;cursor:not-allowed;transform:none}
+.btn.btn-primary.sm-full{width:100%}
+
+/* Helpline */
+.alertcard{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;padding:clamp(20px,3vw,30px);border-radius:28px;background:var(--amber-bg);color:var(--ink);border:1px solid color-mix(in srgb,var(--amber-ink) 30%,transparent)}
+.alertcard h2{font-size:1.4rem}
+.alertcard p{margin-top:6px;max-width:56ch}
+.alertcard .tile{background:var(--surface);color:var(--amber-ink)}
+.alertcard .left{display:flex;gap:16px;align-items:flex-start;flex:1 1 320px}
+details{border:1px solid var(--line);border-radius:18px;background:var(--surface-2);margin-bottom:10px}
+details[open]{background:var(--surface)}
+summary{cursor:pointer;padding:14px 18px;font-weight:800;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;border-radius:18px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:700 1.4rem/1 var(--font-display);color:var(--blue)}
+details[open] summary::after{content:"–"}
+details ul{margin:0;padding:0 18px 16px 38px;color:var(--muted)}
+details li{margin-top:4px}
+.clinic{display:grid;gap:10px;padding:16px;border:1px solid var(--line);border-radius:22px;background:var(--surface-2)}
+@media(min-width:640px){.clinic{grid-template-columns:1fr auto;align-items:center}}
+.clinic strong{font-size:1.05rem;display:block}
+.clinic .btns{display:flex;gap:8px;flex-wrap:wrap}
+.tag{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:999px;font-weight:800;font-size:.8rem}
+.note{font-size:.88rem;color:var(--muted);margin-top:12px}
+
+/* Rescue */
+.photo-prev{width:100%;max-height:180px;object-fit:cover;border-radius:16px;display:none}
+.photo-prev.on{display:block}
+.rep{padding:14px 16px;border:1px solid var(--line);border-radius:20px;background:var(--surface-2);display:grid;gap:6px}
+.rep .top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.rep strong{font-size:1.02rem}
+.empty{padding:22px;border:2px dashed var(--line);border-radius:22px;text-align:center;color:var(--muted)}
+.tips{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--muted)}
+.tips strong{color:var(--ink)}
+.locrow{display:grid;gap:10px}
+@media(min-width:520px){.locrow{grid-template-columns:1fr auto;align-items:end}}
+
+/* Sound detection */
+.recbar{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.rec-on{background:#C2412D!important;border-color:#C2412D!important;color:#fff!important}
+canvas.wf{display:block;width:100%;height:140px;border-radius:20px;background:var(--surface-2);border:1px solid var(--line)}
+.status{margin-top:12px;font-weight:700;color:var(--muted);min-height:1.6em}
+.verdict{display:flex;gap:16px;align-items:center;margin-bottom:18px}
+.verdict .tile{width:72px;height:72px;border-radius:24px}
+.verdict h3{font-size:1.7rem}
+.conf{display:grid;gap:12px}
+.conf .row{display:grid;grid-template-columns:70px 1fr 48px;gap:12px;align-items:center;font-weight:800}
+.conf .row span:last-child{text-align:right;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.facts span{padding:6px 14px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);font-weight:700;font-size:.9rem}
+
+/* Info dialog */
+#info .dlg p{color:var(--muted)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .trail span{opacity:.55!important}
+}
+</style>
+</head>
+<body id="top">
+
+<!-- Shared paw symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="paw" viewBox="0 0 64 64">
+    <ellipse cx="13" cy="29" rx="6" ry="8" transform="rotate(-22 13 29)"/>
+    <ellipse cx="25" cy="15" rx="6.5" ry="9"/>
+    <ellipse cx="40" cy="15" rx="6.5" ry="9"/>
+    <ellipse cx="52" cy="29" rx="6" ry="8" transform="rotate(22 52 29)"/>
+    <path d="M32 30c-9 0-17 8-17 16 0 6 5 9 10 8 3-1 5-2 7-2s4 1 7 2c5 1 10-2 10-8 0-8-8-16-17-16z"/>
+  </symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="#/home" aria-label="ResQPaws home">
+      <span class="brand-mark"><svg class="paw" aria-hidden="true"><use href="#paw"/></svg></span>
+      <span>ResQPaws</span>
+    </a>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <button class="btn btn-secondary btn-sm" id="login-open" type="button">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>
+      <span>Log in</span>
+    </button>
+    <nav id="nav" aria-label="Primary">
+      <ul>
+        <li><a href="#/home" aria-current="page">Home</a></li>
+        <li><a href="#/my-dog">My Dog</a></li>
+        <li><a href="#/adoption">Adoption</a></li>
+        <li><a href="#/helpline">Helpline</a></li>
+        <li><a href="#/rescue">Rescue Support</a></li>
+        <li><a href="#/support">Regional Support</a></li>
+      </ul>
+    </nav>
+    <label class="lang-switch">
+      <span class="sr-only">Language</span>
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+      <select id="lang-select">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+        <option value="hi">हिन्दी</option>
+        <option value="te">తెలుగు</option>
+        <option value="kn">ಕನ್ನಡ</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main id="main">
+<div id="view-home" data-view="home">
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-title">
+  <svg class="deco-paw paw" style="left:-30px;bottom:-20px;width:170px;height:170px;transform:rotate(-20deg)" aria-hidden="true"><use href="#paw"/></svg>
+  <svg class="deco-paw paw" style="right:8%;top:40px;width:80px;height:80px;transform:rotate(18deg)" aria-hidden="true"><use href="#paw"/></svg>
+  <div class="wrap hero-grid">
+    <div>
+      <h1 id="hero-title">Welcome to ResQPaws</h1>
+      <p class="sub">AI-Powered Animal Rescue, Care, and Adoption Platform</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#quick">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg>
+          Get Started
+        </a>
+        <a class="btn btn-secondary" href="#assistant" id="talk-ai">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H10l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/><path d="M9 10.5h.01M12 10.5h.01M15 10.5h.01"/></svg>
+          Talk to AI Assistant
+        </a>
+      </div>
+    </div>
+
+    <div class="scene">
+      <svg viewBox="0 0 560 460" role="img" aria-label="Illustration of a happy dog and cat sitting on a grassy hill, with a blue bird perched on a branch above them">
+        <circle class="blob" cx="280" cy="228" r="205"/>
+        <circle cx="452" cy="86" r="32" fill="#FFE9A8"/>
+        <g class="cloud"><ellipse cx="100" cy="112" rx="44" ry="15"/><ellipse cx="128" cy="98" rx="28" ry="15"/><ellipse cx="72" cy="102" rx="22" ry="12"/></g>
+        <g class="cloud"><ellipse cx="330" cy="60" rx="36" ry="12"/><ellipse cx="352" cy="50" rx="22" ry="12"/></g>
+
+        <!-- hills -->
+        <path class="hill1" d="M0 392 Q140 326 290 358 T560 344 V460 H0Z"/>
+        <path class="hill2" d="M0 424 Q160 376 300 406 T560 396 V460 H0Z"/>
+        <g fill="#fff" opacity=".55">
+          <use href="#paw" x="40" y="418" width="26" height="26" transform="rotate(-20 53 431)"/>
+          <use href="#paw" x="262" y="426" width="22" height="22" transform="rotate(15 273 437)"/>
+          <use href="#paw" x="500" y="414" width="26" height="26" transform="rotate(25 513 427)"/>
+        </g>
+
+        <!-- branch + bird -->
+        <path d="M330 150 Q430 166 548 126" stroke="#8B6B4A" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <ellipse cx="368" cy="152" rx="16" ry="8" fill="#5DBB93" transform="rotate(-28 368 152)"/>
+        <ellipse cx="520" cy="130" rx="16" ry="8" fill="#5DBB93" transform="rotate(30 520 130)"/>
+        <ellipse cx="500" cy="118" rx="14" ry="7" fill="#7CCBA3" transform="rotate(-40 500 118)"/>
+        <path d="M418 118 L384 136 L396 118 Z" fill="#3E86C2"/>
+        <ellipse cx="440" cy="116" rx="26" ry="21" fill="#5AA9E6"/>
+        <path d="M424 116 Q440 134 458 112 Q446 104 424 116Z" fill="#3E86C2"/>
+        <circle cx="460" cy="96" r="15" fill="#5AA9E6"/>
+        <path d="M472 93 L488 99 L472 104Z" fill="#F5A64B"/>
+        <circle cx="464" cy="93" r="3.2" fill="#23303f"/><circle cx="465" cy="92" r="1" fill="#fff"/>
+        <path d="M436 136 v8 M448 136 v8" stroke="#F5A64B" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- hearts -->
+        <path d="M276 190s-14-9-14-20a8 8 0 0 1 14-5 8 8 0 0 1 14 5c0 11-14 20-14 20z" fill="#7CCBA3" transform="translate(0 0)"/>
+        <path d="M312 150s-9-6-9-13a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 7-9 13-9 13z" fill="#5AA9E6"/>
+
+        <!-- DOG -->
+        <g>
+          <path d="M226 386 Q264 356 250 322" stroke="#C98A50" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <ellipse cx="170" cy="352" rx="58" ry="64" fill="#DDA46A"/>
+          <ellipse cx="170" cy="364" rx="30" ry="44" fill="#F7E6CE"/>
+          <ellipse cx="124" cy="392" rx="26" ry="26" fill="#CF9560"/>
+          <ellipse cx="216" cy="392" rx="26" ry="26" fill="#CF9560"/>
+          <rect x="146" y="372" width="20" height="42" rx="10" fill="#DDA46A"/>
+          <rect x="174" y="372" width="20" height="42" rx="10" fill="#DDA46A"/>
+          <ellipse cx="156" cy="414" rx="15" ry="8" fill="#F7E6CE"/>
+          <ellipse cx="184" cy="414" rx="15" ry="8" fill="#F7E6CE"/>
+          <ellipse cx="122" cy="252" rx="19" ry="40" fill="#B67940" transform="rotate(12 122 252)"/>
+          <ellipse cx="218" cy="252" rx="19" ry="40" fill="#B67940" transform="rotate(-12 218 252)"/>
+          <ellipse cx="170" cy="250" rx="52" ry="50" fill="#E6B07A"/>
+          <ellipse cx="170" cy="273" rx="26" ry="20" fill="#F7E6CE"/>
+          <circle cx="152" cy="244" r="6.5" fill="#23303f"/><circle cx="188" cy="244" r="6.5" fill="#23303f"/>
+          <circle cx="154" cy="242" r="2" fill="#fff"/><circle cx="190" cy="242" r="2" fill="#fff"/>
+          <ellipse cx="136" cy="266" rx="8" ry="5" fill="#F4A7A0" opacity=".55"/><ellipse cx="204" cy="266" rx="8" ry="5" fill="#F4A7A0" opacity=".55"/>
+          <path d="M161 281 q9 18 18 0z" fill="#F28BA0"/>
+          <ellipse cx="170" cy="262" rx="10" ry="6.5" fill="#2A3442"/>
+          <path d="M170 268v8M170 276q-9 9-17 1M170 276q9 9 17 1" stroke="#2A3442" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M128 292 Q170 318 212 292" stroke="#2F7FB8" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <circle cx="170" cy="312" r="7" fill="#F5C04B"/>
+        </g>
+
+        <!-- CAT -->
+        <g>
+          <path d="M416 400 Q476 402 468 344 Q464 314 440 322" stroke="#93A9BD" stroke-width="15" fill="none" stroke-linecap="round"/>
+          <ellipse cx="370" cy="360" rx="48" ry="58" fill="#A9BCCD"/>
+          <ellipse cx="370" cy="372" rx="24" ry="38" fill="#EAF1F7"/>
+          <path d="M328 338h14M326 356h14M398 338h14M400 356h14" stroke="#8FA6BA" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="352" cy="414" rx="14" ry="8" fill="#EAF1F7"/><ellipse cx="388" cy="414" rx="14" ry="8" fill="#EAF1F7"/>
+          <path d="M330 258 L332 210 L364 242Z" fill="#B7C9D8"/>
+          <path d="M410 258 L408 210 L376 242Z" fill="#B7C9D8"/>
+          <path d="M337 246 L338 224 L354 240Z" fill="#F4B6C2"/>
+          <path d="M403 246 L402 224 L386 240Z" fill="#F4B6C2"/>
+          <ellipse cx="370" cy="276" rx="48" ry="42" fill="#B7C9D8"/>
+          <ellipse cx="370" cy="292" rx="20" ry="13" fill="#EAF1F7"/>
+          <path d="M370 236v12M358 238l2 10M382 238l-2 10" stroke="#8FA6BA" stroke-width="4" stroke-linecap="round"/>
+          <ellipse cx="352" cy="272" rx="7.5" ry="9" fill="#6CC08E"/><ellipse cx="388" cy="272" rx="7.5" ry="9" fill="#6CC08E"/>
+          <ellipse cx="352" cy="272" rx="2.6" ry="6.5" fill="#22303c"/><ellipse cx="388" cy="272" rx="2.6" ry="6.5" fill="#22303c"/>
+          <circle cx="354" cy="268" r="2" fill="#fff"/><circle cx="390" cy="268" r="2" fill="#fff"/>
+          <path d="M365 284h10l-5 6z" fill="#F08FA5"/>
+          <path d="M370 290v4M370 294q-7 6-13 1M370 294q7 6 13 1" stroke="#4A5A6B" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M342 290l-28-4M342 296l-28 5M398 290l28-4M398 296l28 5" stroke="#6E8296" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M340 312 Q370 326 400 312" stroke="#3FA37A" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <circle cx="370" cy="326" r="6" fill="#F5C04B"/>
+        </g>
+      </svg>
+
+      <div class="chip c1" role="note">
+        <span class="dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8M10 20a2 2 0 0 0 4 0"/></svg></span>
+        <span><strong>Walk reminder</strong><span class="t">Bruno · 6:30 pm</span></span>
+      </div>
+      <div class="chip c2" role="note">
+        <span class="dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+        <span><strong>Rescue request</strong><span class="t">1.2 km away</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trail" id="trail" aria-hidden="true"></div>
+
+<!-- AI ASSISTANT -->
+<section class="section" id="assistant" aria-labelledby="ai-title" style="padding-top:0">
+  <div class="wrap">
+    <div class="assistant">
+      <div class="a-info">
+        <div class="a-badge">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H10l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/><path d="M12 8l.9 2.1L15 11l-2.1.9L12 14l-.9-2.1L9 11l2.1-.9z"/></svg>
+        </div>
+        <h2 id="ai-title">Ask the ResQPaws assistant</h2>
+        <p>Get quick answers to pet care, health, vaccination, feeding, and rescue questions, any time of day.</p>
+        <ul class="topics" aria-label="Topics the assistant can help with">
+          <li>Pet care</li><li>Health</li><li>Vaccination</li><li>Feeding</li><li>Rescue</li>
+        </ul>
+      </div>
+      <div class="a-chat">
+        <div class="chat-log" id="chat-log" role="log" aria-live="polite" aria-label="Conversation with the ResQPaws assistant" tabindex="0">
+          <div class="msg bot">
+            <span class="av" aria-hidden="true"><svg class="paw"><use href="#paw"/></svg></span>
+            <p>Hi! I'm the ResQPaws assistant. Ask me about feeding, vaccines, health worries, or how to help an animal in need.</p>
+          </div>
+        </div>
+        <div class="suggest" aria-label="Suggested questions">
+          <button type="button">When should my puppy get vaccines?</button>
+          <button type="button">How often should I feed my dog?</button>
+          <button type="button">I found an injured animal</button>
+        </div>
+        <form class="ask" id="chat-form" autocomplete="off">
+          <label for="chat-input" class="sr-only">Ask a question about animal care</label>
+          <input id="chat-input" type="text" placeholder="Ask anything about animal care..." enterkeyhint="send">
+          <button class="round mic" id="mic" type="button" aria-pressed="false" aria-label="Ask with your voice">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3M9 21h6"/></svg>
+          </button>
+          <button class="round send" type="submit" aria-label="Send question">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </form>
+        <p class="fine">General guidance only. In an emergency, contact a veterinarian right away.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK ACCESS -->
+<section class="section" id="quick" aria-labelledby="quick-title" style="padding-top:clamp(20px,3vw,32px)">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="quick-title">Everything in one place</h2>
+      <p>Jump straight to the tools you use most.</p>
+    </div>
+    <div class="qgrid">
+
+      <a class="qcard" id="my-dog" href="#/my-dog">
+        <span class="tile t-blue"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6 5.5 3.5C4 5 3 8 3.5 11c.3 1.8 1.2 3 2.5 3.6M16 6l2.5-2.5C20 5 21 8 20.5 11c-.3 1.8-1.2 3-2.5 3.6"/><path d="M8 6h8v8.5a4 4 0 0 1-8 0z"/><path d="M10 10.5h.01M14 10.5h.01M11 14h2"/></svg></span>
+        <span class="go-arrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>My Dog</h3>
+        <p>Manage pet profile, vaccinations, food, water, and walk reminders</p>
+      </a>
+
+      <a class="qcard" id="adoption" href="#/adoption">
+        <span class="tile t-green"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/><path d="M12 11v3M10.5 12.5h3" /></svg></span>
+        <span class="go-arrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>Adoption</h3>
+        <p>Find loving homes for rescued animals</p>
+      </a>
+
+      <a class="qcard" id="helpline" href="#/helpline">
+        <span class="tile t-blue"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="4"/><path d="M12 8v7M8.5 11.5h7"/></svg></span>
+        <span class="go-arrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>Helpline</h3>
+        <p>Locate nearby veterinary hospitals and emergency support</p>
+      </a>
+
+      <a class="qcard" id="sound" href="#/sound">
+        <span class="tile t-green"><svg class="ic wave" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="12" x2="3" y2="12.01"/><line x1="7" y1="8" x2="7" y2="16"/><line x1="11" y1="4" x2="11" y2="20"/><line x1="15" y1="7" x2="15" y2="17"/><line x1="19" y1="10" x2="19" y2="14"/><line x1="22" y1="12" x2="22" y2="12.01"/></svg></span>
+        <span class="go-arrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>Animal Sound Detection</h3>
+        <p>Identify animals from recorded sounds</p>
+      </a>
+
+      <a class="qcard" id="rescue" href="#/rescue">
+        <span class="tile t-amber"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+        <span class="go-arrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>Rescue Support</h3>
+        <p>Report and assist animals needing help</p>
+      </a>
+
+      <a class="qcard" id="support" href="#/support">
+        <span class="tile t-blue"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <span class="go-arrow"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <h3>Regional Support</h3>
+        <p>Find NGOs, shelters and rescue centres near you, in your language</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section" aria-labelledby="stats-title" style="padding-top:clamp(20px,3vw,32px)">
+  <div class="wrap">
+    <div class="panel">
+      <svg class="bgpaw paw" aria-hidden="true"><use href="#paw"/></svg>
+      <h2 id="stats-title">Every rescue starts with someone who cared</h2>
+      <div class="stats">
+        <div class="stat">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg>
+          <span class="num" data-target="12480" data-suffix="+">0</span>
+          <span class="lbl">Animals Rescued</span>
+        </div>
+        <div class="stat">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M12 17s-3-1.8-3-4a1.7 1.7 0 0 1 3-1 1.7 1.7 0 0 1 3 1c0 2.2-3 4-3 4z"/></svg>
+          <span class="num" data-target="8236" data-suffix="+">0</span>
+          <span class="lbl">Successful Adoptions</span>
+        </div>
+        <div class="stat">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .6 3.2 2.3 3.5 5.2"/></svg>
+          <span class="num" data-target="3150" data-suffix="+">0</span>
+          <span class="lbl">Active Volunteers</span>
+        </div>
+        <div class="stat">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="4"/><path d="M12 8v7M8.5 11.5h7"/></svg>
+          <span class="num" data-target="420" data-suffix="+">0</span>
+          <span class="lbl">Partner Veterinary Clinics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED ANIMALS -->
+<section class="section" id="featured" aria-labelledby="feat-title" style="padding-top:clamp(20px,3vw,32px)">
+  <div class="wrap">
+    <div class="head-row">
+      <div class="section-head">
+        <h2 id="feat-title">Meet animals waiting for a home</h2>
+        <p>Every one of them is vaccinated, checked by a vet, and ready to be loved.</p>
+      </div>
+      <a class="btn btn-secondary btn-sm" href="#/adoption">View all animals</a>
+    </div>
+    <div class="agrid" id="agrid"></div>
+  </div>
+</section>
+
+</div>
+
+<!-- ================= MY DOG ================= -->
+<div id="view-my-dog" data-view="my-dog" hidden>
+  <div class="wrap view">
+    <a class="back" href="#/home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to home</a>
+    <div class="vhead">
+      <span class="tile t-blue"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6 5.5 3.5C4 5 3 8 3.5 11c.3 1.8 1.2 3 2.5 3.6M16 6l2.5-2.5C20 5 21 8 20.5 11c-.3 1.8-1.2 3-2.5 3.6"/><path d="M8 6h8v8.5a4 4 0 0 1-8 0z"/><path d="M10 10.5h.01M14 10.5h.01M11 14h2"/></svg></span>
+      <div><h1 tabindex="-1">My Dog</h1><p>Keep your dog's profile, vaccines, meals, water, and walks in one place.</p></div>
+    </div>
+
+    <div class="vgrid two">
+      <section class="vcard" aria-labelledby="pf-name">
+        <div class="pf-art" id="pf-art"></div>
+        <h2 class="pf-name" id="pf-name">Bruno</h2>
+        <p class="meta" id="pf-meta" style="margin-bottom:18px"></p>
+        <form class="stack" id="pf-form">
+          <label class="field">Name<input id="pf-in-name" type="text" required maxlength="30"></label>
+          <label class="field">Breed<input id="pf-in-breed" type="text" maxlength="40"></label>
+          <div class="frow">
+            <label class="field">Age (years)<input id="pf-in-age" type="number" min="0" max="30" step="0.5"></label>
+            <label class="field">Weight (kg)<input id="pf-in-weight" type="number" min="0" max="120" step="0.5"></label>
+          </div>
+          <button class="btn btn-primary" type="submit">Save profile</button>
+        </form>
+      </section>
+
+      <div class="stack-lg">
+        <section class="vcard" aria-labelledby="today-h">
+          <h2 id="today-h">Today</h2>
+          <p class="meta">Tap + each time you feed, refill water, or walk. Counters reset every day.</p>
+          <div class="tracks" id="tracks"></div>
+        </section>
+
+        <section class="vcard" aria-labelledby="rem-h">
+          <h2 id="rem-h">Food, water, and walk reminders</h2>
+          <p class="next" id="next-rem" aria-live="polite"></p>
+          <ul class="rlist" id="rlist"></ul>
+          <form class="addrow" id="rem-form">
+            <label class="field">Type
+              <select id="rem-type"><option value="food">Food</option><option value="water">Water</option><option value="walk">Walk</option></select>
+            </label>
+            <label class="field">Time<input id="rem-time" type="time" value="09:00" required></label>
+            <button class="btn btn-secondary" type="submit">Add reminder</button>
+          </form>
+          <p class="note">Reminders alert you while this page is open.</p>
+        </section>
+
+        <section class="vcard" aria-labelledby="vax-h">
+          <h2 id="vax-h">Vaccinations</h2>
+          <p class="meta">Mark a vaccine as given after your vet's visit and the next due date updates.</p>
+          <ul class="vlist" id="vlist"></ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ADOPTION ================= -->
+<div id="view-adoption" data-view="adoption" hidden>
+  <div class="wrap view">
+    <a class="back" href="#/home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to home</a>
+    <div class="vhead">
+      <span class="tile t-green"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/><path d="M12 11v3M10.5 12.5h3"/></svg></span>
+      <div><h1 tabindex="-1">Adoption</h1><p>Find a loving home for a rescued animal. Send a request and the shelter will get in touch.</p></div>
+    </div>
+    <div class="filters" role="group" aria-label="Filter animals">
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="dog" aria-pressed="false">Dogs</button>
+      <button type="button" data-f="cat" aria-pressed="false">Cats</button>
+      <button type="button" data-f="rabbit" aria-pressed="false">Rabbits</button>
+      <button type="button" data-f="parakeet" aria-pressed="false">Birds</button>
+      <label class="check"><input type="checkbox" id="only-avail"> Available only</label>
+    </div>
+    <p class="meta" id="adopt-count" aria-live="polite" style="margin-bottom:16px"></p>
+    <div class="agrid" id="adopt-grid"></div>
+  </div>
+</div>
+
+<!-- ================= HELPLINE ================= -->
+<div id="view-helpline" data-view="helpline" hidden>
+  <div class="wrap view">
+    <a class="back" href="#/home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to home</a>
+    <div class="vhead">
+      <span class="tile t-blue"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="4"/><path d="M12 8v7M8.5 11.5h7"/></svg></span>
+      <div><h1 tabindex="-1">Helpline</h1><p>Find veterinary hospitals and know what to do until you reach one.</p></div>
+    </div>
+
+    <div class="alertcard">
+      <div class="left">
+        <span class="tile"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+        <div>
+          <h2>Is this an emergency?</h2>
+          <p>If an animal is bleeding heavily, struggling to breathe, having a seizure, or may have swallowed poison, go to the nearest emergency vet now.</p>
+        </div>
+      </div>
+      <a class="btn btn-primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=emergency+veterinary+hospital+near+me">Find emergency vets near me</a>
+    </div>
+
+    <div class="vgrid even" style="margin-top:20px">
+      <section class="vcard" aria-labelledby="fa-h">
+        <h2 id="fa-h">First aid while you travel</h2>
+        <p class="meta">General guidance only. A vet should always examine the animal.</p>
+        <details open><summary>Bleeding</summary><ul><li>Press a clean cloth firmly on the wound.</li><li>If blood soaks through, add more cloth on top instead of removing it.</li><li>Keep the animal calm and head to a vet.</li></ul></details>
+        <details><summary>Heatstroke</summary><ul><li>Move the animal to shade or a cool room.</li><li>Wet the body with cool, not ice-cold, water and offer small sips.</li><li>Go to a vet right away, even if the animal seems better.</li></ul></details>
+        <details><summary>Suspected poisoning</summary><ul><li>Note what was eaten and roughly how much, and keep the packaging.</li><li>Don't make the animal vomit unless a vet tells you to.</li><li>Call a vet immediately.</li></ul></details>
+        <details><summary>Choking</summary><ul><li>Look in the mouth, and remove an object only if you can see it and it is safe to do so.</li><li>Don't push your fingers blindly down the throat.</li><li>Get to a vet urgently.</li></ul></details>
+        <details><summary>Road accident</summary><ul><li>Make sure the area is safe for you first.</li><li>Move the animal as little as possible. Slide a blanket or board under it if you must.</li><li>Injured animals may bite, so approach slowly and take care.</li></ul></details>
+      </section>
+
+      <section class="vcard" aria-labelledby="cl-h">
+        <h2 id="cl-h">Partner clinics</h2>
+        <p class="meta">Sample listings for this demo.</p>
+        <label class="check" style="margin:0 0 14px"><input type="checkbox" id="only-24"> Open 24 hours only</label>
+        <ul class="clist" id="clist"></ul>
+        <p class="note">Connect your real clinic directory to replace these sample listings.</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SOUND DETECTION ================= -->
+<div id="view-sound" data-view="sound" hidden>
+  <div class="wrap view">
+    <a class="back" href="#/home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to home</a>
+    <div class="vhead">
+      <span class="tile t-green"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="12" x2="3" y2="12.01"/><line x1="7" y1="8" x2="7" y2="16"/><line x1="11" y1="4" x2="11" y2="20"/><line x1="15" y1="7" x2="15" y2="17"/><line x1="19" y1="10" x2="19" y2="14"/><line x1="22" y1="12" x2="22" y2="12.01"/></svg></span>
+      <div><h1 tabindex="-1">Animal Sound Detection</h1><p>Record a sound or upload a clip and see whether it sounds like a dog, cat, or bird.</p></div>
+    </div>
+    <div class="vgrid even">
+      <section class="vcard" aria-labelledby="rec-h">
+        <h2 id="rec-h">Your sound</h2>
+        <p class="meta">Record up to 15 seconds, or upload an audio file.</p>
+        <div class="recbar">
+          <button class="btn btn-primary" type="button" id="rec-btn">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3M9 21h6"/></svg>
+            <span id="rec-label">Start recording</span>
+          </button>
+          <label class="btn btn-secondary" for="snd-file" style="cursor:pointer">
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>
+            Upload audio
+          </label>
+          <input id="snd-file" class="sr-only" type="file" accept="audio/*">
+        </div>
+        <canvas class="wf" id="wf" width="800" height="280" role="img" aria-label="Sound waveform"></canvas>
+        <p class="status" id="snd-status" role="status" aria-live="polite">Ready when you are.</p>
+      </section>
+
+      <section class="vcard" aria-labelledby="res-h">
+        <h2 id="res-h">Result</h2>
+        <div id="snd-result"><div class="empty">Record or upload a sound to see what it sounds like.</div></div>
+        <p class="note">This is a demo estimate based on pitch and rhythm. A trained sound-recognition model would be more accurate.</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RESCUE SUPPORT ================= -->
+<div id="view-rescue" data-view="rescue" hidden>
+  <div class="wrap view">
+    <a class="back" href="#/home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to home</a>
+    <div class="vhead">
+      <span class="tile t-amber"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+      <div><h1 tabindex="-1">Rescue Support</h1><p>Report an animal that needs help so volunteers can find it.</p></div>
+    </div>
+    <div class="vgrid two" style="grid-template-columns:unset">
+      <div class="vgrid even">
+        <section class="vcard" aria-labelledby="rp-h">
+          <h2 id="rp-h">Report an animal</h2>
+          <form class="stack" id="rescue-form">
+            <div class="frow">
+              <label class="field">Animal
+                <select id="rp-animal" required><option value="">Choose</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Cow or buffalo</option><option>Other</option></select>
+              </label>
+              <label class="field">Situation
+                <select id="rp-cond" required><option value="">Choose</option><option>Injured</option><option>Sick</option><option>Abandoned or stray</option><option>Trapped</option><option>Other</option></select>
+              </label>
+            </div>
+            <div class="locrow">
+              <label class="field">Location or landmark<input id="rp-loc" type="text" required placeholder="Street, area, or nearby landmark"></label>
+              <button class="btn btn-secondary btn-sm" type="button" id="rp-geo">
+                <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+                Use my location
+              </button>
+            </div>
+            <label class="field">What is happening?<textarea id="rp-desc" placeholder="Describe the animal and any injuries."></textarea></label>
+            <label class="field">Photo (optional)<input id="rp-photo" type="file" accept="image/*"></label>
+            <img class="photo-prev" id="rp-prev" alt="Preview of the selected photo">
+            <div class="frow">
+              <label class="field">Your name<input id="rp-name" type="text" autocomplete="name"></label>
+              <label class="field">Phone<input id="rp-phone" type="tel" autocomplete="tel"></label>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit report</button>
+          </form>
+        </section>
+
+        <div class="stack-lg">
+          <section class="vcard" aria-labelledby="yr-h">
+            <h2 id="yr-h">Your reports</h2>
+            <ul class="replist" id="replist"></ul>
+          </section>
+          <section class="vcard" aria-labelledby="ht-h">
+            <h2 id="ht-h">How to help safely</h2>
+            <ul class="tips">
+              <li><strong>Keep yourself safe.</strong> Frightened or hurt animals may bite or scratch.</li>
+              <li><strong>Give space.</strong> Keep the animal calm and away from traffic if you can do so safely.</li>
+              <li><strong>Skip food and water</strong> for an injured animal until a vet or volunteer advises.</li>
+              <li><strong>Stay reachable</strong> so volunteers can call you for directions.</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= REGIONAL SUPPORT ================= -->
+<div id="view-support" data-view="support" hidden>
+  <div class="wrap view">
+    <a class="back" href="#/home"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Back to home</a>
+    <div class="vhead">
+      <span class="tile t-blue"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+      <div><h1 tabindex="-1" data-i18n="support.title">Regional Support</h1><p data-i18n="support.subtitle">Find veterinary hospitals, shelters, rescue centres and NGOs near you.</p></div>
+    </div>
+
+    <div class="filterbar">
+      <button class="btn btn-primary btn-sm geo-btn" type="button" id="sup-geo">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+        <span id="sup-geo-label" data-i18n="support.useLocation">Use my location</span>
+      </button>
+      <label class="field" data-i18n-label="support.type">Type
+        <select id="sup-type">
+          <option value="" data-i18n="support.allTypes">All types</option>
+          <option value="veterinary_hospital" data-i18n="type.vet">Veterinary hospital</option>
+          <option value="animal_shelter" data-i18n="type.shelter">Animal shelter</option>
+          <option value="rescue_center" data-i18n="type.rescue">Rescue center</option>
+          <option value="ngo" data-i18n="type.ngo">NGO</option>
+          <option value="welfare_org" data-i18n="type.welfare">Animal welfare organization</option>
+        </select>
+      </label>
+      <label class="field" data-i18n-label="support.state">State
+        <select id="sup-state"><option value="" data-i18n="support.all">All</option></select>
+      </label>
+      <label class="field" data-i18n-label="support.city">City
+        <select id="sup-city"><option value="" data-i18n="support.all">All</option></select>
+      </label>
+      <label class="field" data-i18n-label="support.search">Search
+        <input type="text" id="sup-q" data-i18n-ph="support.search" placeholder="Search by name">
+      </label>
+    </div>
+    <p class="fine" id="sup-status" role="status" aria-live="polite"></p>
+    <div class="centerlist" id="sup-list"></div>
+    <p class="fine" id="sup-empty" hidden data-i18n="support.noResults">No matching centres found. Try a different filter.</p>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a class="brand" href="#/home" aria-label="ResQPaws home">
+          <span class="brand-mark"><svg class="paw" aria-hidden="true"><use href="#paw"/></svg></span>
+          <span>ResQPaws</span>
+        </a>
+        <p class="blurb">AI-powered rescue, care, and adoption for every animal that needs a hand.</p>
+      </div>
+      <nav aria-label="Footer">
+        <h2>Company</h2>
+        <ul>
+          <li><a href="#" data-info="about">About Us</a></li>
+          <li><a href="#" data-info="contact">Contact</a></li>
+          <li><a href="#" data-info="privacy">Privacy Policy</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="copy">Copyright © <span id="yr">2026</span> ResQPaws. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Login dialog -->
+<dialog id="login" aria-labelledby="login-title">
+  <form class="dlg" id="login-form" method="dialog">
+    <h2 id="login-title">Welcome back</h2>
+    <label class="field">Email<input type="email" required autocomplete="email"></label>
+    <label class="field">Password<input type="password" required autocomplete="current-password"></label>
+    <div class="row">
+      <button class="btn btn-secondary btn-sm" type="button" id="login-cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" type="submit">Log in</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<dialog id="adopt" aria-labelledby="adopt-title">
+  <form class="dlg" id="adopt-form" method="dialog">
+    <div><h2 id="adopt-title">Adopt</h2><p class="meta" id="adopt-sub"></p></div>
+    <label class="field">Your name<input type="text" required autocomplete="name"></label>
+    <label class="field">Phone<input type="tel" required autocomplete="tel"></label>
+    <label class="field">Where will the animal live?
+      <select required><option value="">Choose</option><option>House with a yard</option><option>Apartment</option><option>Farm or rural home</option></select>
+    </label>
+    <label class="field">Anything the shelter should know?<textarea></textarea></label>
+    <div class="row">
+      <button class="btn btn-secondary btn-sm" type="button" id="adopt-cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" type="submit" id="adopt-submit">Send request</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="info" aria-labelledby="info-title">
+  <div class="dlg">
+    <h2 id="info-title"></h2>
+    <p id="info-body"></p>
+    <div class="row"><button class="btn btn-primary btn-sm" type="button" id="info-close">Close</button></div>
+  </div>
+</dialog>
+
+
+<script>
+(function(){
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Toast */
+  const toastEl = $('#toast'); let tt;
+  function toast(msg, ms){ toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(tt); tt = setTimeout(()=>toastEl.classList.remove('show'), ms || 2600); }
+
+  $('#yr').textContent = new Date().getFullYear();
+
+  /* Mobile nav */
+  const menuBtn = $('#menu-btn'), nav = $('#nav');
+  menuBtn.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open);
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  $$('#nav a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); menuBtn.setAttribute('aria-label','Open menu');
+  }));
+
+  /* Login dialog */
+  const dlg = $('#login');
+  $('#login-open').addEventListener('click', () => dlg.showModal && dlg.showModal());
+  $('#login-cancel').addEventListener('click', () => dlg.close());
+  $('#login-form').addEventListener('submit', () => toast('Signed in (demo)'));
+
+  /* Paw trail */
+  const trail = $('#trail'); const N = 12;
+  for(let i=0;i<N;i++){
+    const s = document.createElement('span');
+    const left = 2 + (i/(N-1))*92;
+    const y = i%2 ? 8 : 30;
+    const rot = 90 + (i%2 ? -14 : 14);
+    s.style.cssText = `left:${left}%;top:${y}px;--i:${i};--t:rotate(${rot}deg);transform:rotate(${rot}deg)`;
+    s.innerHTML = '<svg class="paw" viewBox="0 0 64 64"><use href="#paw"/></svg>';
+    trail.appendChild(s);
+  }
+  const io1 = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ trail.classList.add('go'); io1.disconnect(); } }), {threshold:.3});
+  io1.observe(trail);
+
+  /* Talk to AI focuses the input */
+  $('#talk-ai').addEventListener('click', () => setTimeout(() => $('#chat-input').focus({preventScroll:true}), reduce ? 0 : 500));
+
+  /* Chat */
+  const log = $('#chat-log'), form = $('#chat-form'), input = $('#chat-input');
+  function add(text, who){
+    const d = document.createElement('div'); d.className = 'msg ' + who;
+    if(who === 'bot'){ const av = document.createElement('span'); av.className='av'; av.setAttribute('aria-hidden','true'); av.innerHTML='<svg class="paw"><use href="#paw"/></svg>'; d.appendChild(av); }
+    const p = document.createElement('p'); p.textContent = text; d.appendChild(p);
+    log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
+  }
+  const rules = [
+    {re:/poison|bleed|hit by|seizure|not breathing|choking|collaps|unconscious/i,
+     a:"This sounds like an emergency. Contact the nearest emergency vet now and tell them what happened. Keep the animal calm and warm, and don't give food, water, or medicine unless a vet tells you to."},
+    {re:/injur|hurt|wound|stray|abandon|rescue|found/i,
+     a:"Thank you for helping. Stay calm and keep yourself safe, since frightened animals can bite. Keep the animal quiet in a shaded spot, don't force food or water, and call a vet or the Helpline. You can also report the location under Rescue Support so a volunteer can help."},
+    {re:/vaccin|shot|booster|rabies/i,
+     a:"Puppies and kittens usually begin core vaccines at around 6 to 8 weeks, with boosters every 3 to 4 weeks until about 16 weeks. Adults need regular boosters, and rabies protection is essential for dogs and cats. Your vet will set the exact schedule."},
+    {re:/feed|food|eat|meal|diet|hungry|water/i,
+     a:"Most adult dogs do well with two meals a day at regular times. Puppies need three to four smaller meals. Always keep fresh water available, and avoid chocolate, grapes, onions, and anything sweetened with xylitol."},
+    {re:/walk|exercise|play/i,
+     a:"Most adult dogs need 30 to 60 minutes of activity a day, split into a couple of walks. Puppies and seniors need shorter, gentler sessions. Avoid hot pavement and the midday heat."},
+    {re:/sick|vomit|diarr|cough|limp|lethargic|not eating|fever|itch|tick|flea/i,
+     a:"Mild stomach upset can settle within a day, but see a vet if it lasts longer than 24 hours or comes with weakness, repeated vomiting, blood, or refusing water. Keep water available and note when symptoms began to help the vet."},
+    {re:/adopt|adoption/i,
+     a:"Adopting is a big and wonderful step. Browse the animals under Adoption, think about space, time, and budget, and plan a first meeting so you and the animal can get to know each other."},
+    {re:/^(hi|hello|hey)\b/i, a:"Hello! What would you like to know about your pet or an animal in need?"}
+  ];
+  function reply(q){
+    const r = rules.find(x => x.re.test(q));
+    return r ? r.a : "I can help with feeding, vaccines, health worries, walks, adoption, and rescue. Try asking something like “How often should I feed my puppy?” For anything urgent, please contact a vet.";
+  }
+  function ask(q){
+    q = q.trim(); if(!q) return;
+    add(q, 'user'); input.value = '';
+    const t = document.createElement('div'); t.className = 'msg bot typing';
+    t.innerHTML = '<span class="av" aria-hidden="true"><svg class="paw"><use href="#paw"/></svg></span><p aria-label="The assistant is typing"><i></i><i></i><i></i></p>';
+    log.appendChild(t); log.scrollTop = log.scrollHeight;
+    setTimeout(() => { t.remove(); add(reply(q), 'bot'); }, reduce ? 0 : 750);
+  }
+  form.addEventListener('submit', e => { e.preventDefault(); ask(input.value); });
+  $$('.suggest button').forEach(b => b.addEventListener('click', () => ask(b.textContent)));
+
+  /* Voice input */
+  const mic = $('#mic'); const SR = window.SpeechRecognition || window.webkitSpeechRecognition; let rec = null;
+  mic.addEventListener('click', () => {
+    if(!SR){ add('Voice input is not available in this browser. Please type your question instead.', 'bot'); return; }
+    if(rec){ rec.stop(); return; }
+    rec = new SR(); rec.lang = navigator.language || 'en-US'; rec.interimResults = false; rec.maxAlternatives = 1;
+    rec.onstart = () => { mic.setAttribute('aria-pressed','true'); mic.setAttribute('aria-label','Stop listening'); toast('Listening…'); };
+    rec.onresult = e => { input.value = e.results[0][0].transcript; ask(input.value); };
+    rec.onerror = e => { toast(e.error === 'not-allowed' ? 'Microphone access was blocked.' : 'Could not hear that. Try again.'); };
+    rec.onend = () => { rec = null; mic.setAttribute('aria-pressed','false'); mic.setAttribute('aria-label','Ask with your voice'); };
+    try{ rec.start(); }catch(_){ rec = null; }
+  });
+
+  /* Count-up stats */
+  const nf = new Intl.NumberFormat('en-US');
+  function count(el){
+    const target = +el.dataset.target, suffix = el.dataset.suffix || '';
+    if(reduce){ el.textContent = nf.format(target) + suffix; return; }
+    const dur = 1600, t0 = performance.now();
+    (function step(now){
+      const p = Math.min((now - t0)/dur, 1), eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = nf.format(Math.round(target*eased)) + (p === 1 ? suffix : '');
+      if(p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  const io2 = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ count(e.target); io2.unobserve(e.target); } }), {threshold:.6});
+  $$('.num').forEach(n => io2.observe(n));
+
+  /* Featured animals */
+  const dog = c => `<svg viewBox="0 0 200 190" aria-hidden="true"><ellipse cx="100" cy="190" rx="72" ry="42" fill="${c.fur}"/><path d="M62 158q38 24 76 0" stroke="${c.collar}" stroke-width="9" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="86" rx="23" ry="44" fill="${c.ear}" transform="rotate(18 50 86)"/><ellipse cx="150" cy="86" rx="23" ry="44" fill="${c.ear}" transform="rotate(-18 150 86)"/><ellipse cx="100" cy="92" rx="55" ry="56" fill="${c.fur}"/>${c.patch?`<ellipse cx="128" cy="82" rx="22" ry="24" fill="${c.ear}"/>`:''}<ellipse cx="100" cy="118" rx="30" ry="23" fill="${c.snout}"/><circle cx="78" cy="88" r="7" fill="#23303f"/><circle cx="122" cy="88" r="7" fill="#23303f"/><circle cx="80" cy="86" r="2.3" fill="#fff"/><circle cx="124" cy="86" r="2.3" fill="#fff"/><ellipse cx="100" cy="106" rx="11" ry="7" fill="#2A3442"/><path d="M100 112v8M100 120q-9 9-17 1M100 120q9 9 17 1" stroke="#2A3442" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M92 124q8 18 16 0z" fill="#F28BA0"/></svg>`;
+  const cat = c => `<svg viewBox="0 0 200 190" aria-hidden="true"><ellipse cx="100" cy="190" rx="66" ry="42" fill="${c.fur}"/><path d="M48 92L52 34L92 66Z" fill="${c.fur}"/><path d="M152 92L148 34L108 66Z" fill="${c.fur}"/><path d="M58 80L60 50L80 68Z" fill="#F4B6C2"/><path d="M142 80L140 50L120 68Z" fill="#F4B6C2"/><ellipse cx="100" cy="106" rx="58" ry="50" fill="${c.fur}"/><ellipse cx="100" cy="126" rx="24" ry="16" fill="${c.muzzle}"/><path d="M100 60v14M86 62l3 12M114 62l-3 12" stroke="${c.stripe}" stroke-width="4" stroke-linecap="round"/><ellipse cx="76" cy="102" rx="8.5" ry="10.5" fill="${c.eye}"/><ellipse cx="124" cy="102" rx="8.5" ry="10.5" fill="${c.eye}"/><ellipse cx="76" cy="102" rx="2.8" ry="7.5" fill="#22303c"/><ellipse cx="124" cy="102" rx="2.8" ry="7.5" fill="#22303c"/><circle cx="78" cy="98" r="2.2" fill="#fff"/><circle cx="126" cy="98" r="2.2" fill="#fff"/><path d="M94 118h12l-6 7z" fill="#F08FA5"/><path d="M100 125v4M100 129q-8 7-15 1M100 129q8 7 15 1" stroke="#4A5A6B" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M70 124l-34-5M70 131l-34 6M130 124l34-5M130 131l34 6" stroke="#6E8296" stroke-width="1.8" stroke-linecap="round"/><path d="M64 156q36 20 72 0" stroke="#3FA37A" stroke-width="8" fill="none" stroke-linecap="round"/></svg>`;
+  const rabbit = c => `<svg viewBox="0 0 200 190" aria-hidden="true"><ellipse cx="100" cy="196" rx="62" ry="42" fill="${c.fur}"/><ellipse cx="74" cy="48" rx="15" ry="44" fill="${c.fur}" transform="rotate(-6 74 48)"/><ellipse cx="126" cy="48" rx="15" ry="44" fill="${c.fur}" transform="rotate(6 126 48)"/><ellipse cx="74" cy="52" rx="7" ry="31" fill="${c.inner}" transform="rotate(-6 74 52)"/><ellipse cx="126" cy="52" rx="7" ry="31" fill="${c.inner}" transform="rotate(6 126 52)"/><circle cx="100" cy="122" r="50" fill="${c.fur}"/><circle cx="80" cy="114" r="6.5" fill="#23303f"/><circle cx="120" cy="114" r="6.5" fill="#23303f"/><circle cx="82" cy="112" r="2" fill="#fff"/><circle cx="122" cy="112" r="2" fill="#fff"/><ellipse cx="66" cy="132" rx="8" ry="5" fill="${c.inner}" opacity=".7"/><ellipse cx="134" cy="132" rx="8" ry="5" fill="${c.inner}" opacity=".7"/><ellipse cx="100" cy="130" rx="6.5" ry="5" fill="#F08FA5"/><path d="M100 135v5M100 140q-7 6-13 1M100 140q7 6 13 1" stroke="#6A5A57" stroke-width="2.2" fill="none" stroke-linecap="round"/><rect x="95" y="143" width="10" height="9" rx="3" fill="#fff" stroke="#D9CFC0"/></svg>`;
+  const bird = () => `<svg viewBox="0 0 200 190" aria-hidden="true"><ellipse cx="100" cy="190" rx="54" ry="50" fill="#7BC96F"/><path d="M84 160q16 12 32 0" stroke="#5CA956" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="100" cy="98" r="46" fill="#F7E27A"/><path d="M86 62q14-10 28 0M82 72q18-10 36 0" stroke="#5A4B2A" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="72" cy="112" r="10" fill="#5AA9E6"/><circle cx="128" cy="112" r="10" fill="#5AA9E6"/><circle cx="80" cy="92" r="9" fill="#fff"/><circle cx="120" cy="92" r="9" fill="#fff"/><circle cx="81" cy="93" r="5" fill="#23303f"/><circle cx="119" cy="93" r="5" fill="#23303f"/><circle cx="82.5" cy="91" r="1.7" fill="#fff"/><circle cx="120.5" cy="91" r="1.7" fill="#fff"/><path d="M90 106Q100 98 110 106Q110 122 100 128Q90 122 90 106Z" fill="#F5A64B"/><path d="M100 118v6" stroke="#C97C24" stroke-width="2" stroke-linecap="round"/></svg>`;
+
+  const animals = [
+    {n:'Biscuit', m:'Dog · Indie mix · 2 years', s:'Available', c:'b-avail', bg:'bg-sky', art: dog({fur:'#DDA46A',ear:'#B67940',snout:'#F7E6CE',collar:'#2F7FB8'})},
+    {n:'Mochi', m:'Cat · Domestic shorthair · 1 year', s:'Available', c:'b-avail', bg:'bg-mint', art: cat({fur:'#F3EFE8',stripe:'#D9CFC0',eye:'#7BB8E8',muzzle:'#FFFFFF'})},
+    {n:'Ginger', m:'Dog · Puppy · 8 months', s:'Adoption pending', c:'b-pend', bg:'bg-sky', art: dog({fur:'#F0C27A',ear:'#C98A3C',snout:'#FFF3DE',collar:'#3FA37A',patch:true})},
+    {n:'Pepper', m:'Cat · Tabby · 3 years', s:'Available', c:'b-avail', bg:'bg-mint', art: cat({fur:'#7E8FA1',stripe:'#5F7186',eye:'#F2C94C',muzzle:'#B9C6D3'})},
+    {n:'Clover', m:'Rabbit · Mini lop · 2 years', s:'Foster needed', c:'b-foster', bg:'bg-sky', art: rabbit({fur:'#EDE7DE',inner:'#F4B6C2'})},
+    {n:'Sunny', m:'Parakeet · 1 year', s:'Available', c:'b-avail', bg:'bg-mint', art: bird()},
+    {n:'Coco', m:'Dog · Labrador mix · 4 years', s:'Available', c:'b-avail', bg:'bg-mint', art: dog({fur:'#5A463C',ear:'#372A23',snout:'#D9C3A5',collar:'#F5C04B'})},
+    {n:'Luna', m:'Cat · Domestic longhair · 2 years', s:'Available', c:'b-avail', bg:'bg-sky', art: cat({fur:'#4A5769',stripe:'#333E4E',eye:'#F2C94C',muzzle:'#6C7A8D'})}
+  ];
+  const sent = new Set(), favs = new Set();
+  const kind = a => a.m.split(' ·')[0].toLowerCase();
+  function cardHTML(a){
+    const done = sent.has(a.n), pend = a.s === 'Adoption pending', foster = a.s === 'Foster needed';
+    const dis = done || pend;
+    const label = done ? 'Request sent' : pend ? 'Adoption pending' : foster ? 'Foster ' + a.n : 'Adopt ' + a.n;
+    return `<article class="acard">
+      <div class="ph ${a.bg}">
+        <svg class="pawbg paw" aria-hidden="true"><use href="#paw"/></svg>
+        ${a.art}
+        <button class="fav" type="button" data-fav="${a.n}" aria-pressed="${favs.has(a.n)}" aria-label="Save ${a.n} to favourites"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></button>
+      </div>
+      <div class="abody">
+        <div><h3>${a.n}</h3><p class="meta">${a.m}</p></div>
+        <span class="badge ${a.c}">${a.s}</span>
+        <button class="btn ${dis ? 'btn-secondary' : 'btn-primary'} btn-sm" type="button" data-adopt="${a.n}" ${dis ? 'disabled' : ''}>${label}</button>
+      </div>
+    </article>`;
+  }
+  const grid = $('#agrid');
+  function renderHome(){ grid.innerHTML = animals.slice(0,6).map(cardHTML).join(''); }
+  renderHome();
+  const RQ = window.RQ = {$, $$, toast, animals, kind, cardHTML, sent, dog,
+    rerender(){ renderHome(); if(RQ.onRerender) RQ.onRerender(); }};
+  document.addEventListener('click', e => {
+    const f = e.target.closest('.fav'); if(!f) return;
+    const on = f.getAttribute('aria-pressed') !== 'true';
+    f.setAttribute('aria-pressed', on);
+    on ? favs.add(f.dataset.fav) : favs.delete(f.dataset.fav);
+    toast(on ? 'Saved to your favourites' : 'Removed from favourites');
+  });
+})();
+</script>
+<script>
+(function(){
+  const RQ = window.RQ, $ = RQ.$, $$ = RQ.$$, toast = RQ.toast;
+  const store = {
+    get(k,d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(_){ return d; } },
+    set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(_){} }
+  };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  /* ---------- Router ---------- */
+  const views = $$('[data-view]');
+  const titles = {home:'ResQPaws – AI-Powered Animal Rescue & Care Platform','my-dog':'My Dog · ResQPaws',adoption:'Adoption · ResQPaws',helpline:'Helpline · ResQPaws',sound:'Animal Sound Detection · ResQPaws',rescue:'Rescue Support · ResQPaws',support:'Regional Support · ResQPaws'};
+  let first = true;
+  function route(){
+    const h = location.hash;
+    let name;
+    if(!h || h === '#' || h === '#top') name = 'home';
+    else { const m = h.match(/^#\/([\w-]+)/); if(!m) return; name = views.some(v => v.dataset.view === m[1]) ? m[1] : 'home'; }
+    views.forEach(v => { v.hidden = v.dataset.view !== name; });
+    $$('#nav a').forEach(a => { if(a.getAttribute('href') === '#/' + name) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    document.title = titles[name] || titles.home;
+    window.scrollTo(0,0);
+    if(!first && name !== 'home'){ const t = $('[data-view="'+name+'"] h1'); if(t) t.focus({preventScroll:true}); }
+    first = false;
+    if(name === 'sound') drawIdle();
+  }
+  window.addEventListener('hashchange', route);
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#/"]');
+    if(a && a.getAttribute('href') === location.hash) route();
+  });
+
+  /* ---------- Dates ---------- */
+  const pad = n => String(n).padStart(2,'0');
+  const iso = d => d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+  const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+  const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+  const todayIso = () => iso(new Date());
+  const daysUntil = s => Math.round((parse(s) - parse(todayIso())) / 864e5);
+  const fmtDate = s => parse(s).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+  const fmtTime = t => { const [h,m] = t.split(':').map(Number); return ((h+11)%12+1) + ':' + pad(m) + ' ' + (h>=12?'pm':'am'); };
+
+  /* ---------- MY DOG ---------- */
+  const T = todayIso();
+  let dog = store.get('rq-dog', null) || {
+    name:'Bruno', breed:'Indie mix', age:3, weight:18,
+    vax:[
+      {id:'rab', name:'Rabies', note:'Yearly booster', every:365, due:addDays(T,45)},
+      {id:'dhpp', name:'DHPP', note:'Distemper, hepatitis, parvo · yearly', every:365, due:addDays(T,12)},
+      {id:'lepto', name:'Leptospirosis', note:'Yearly booster', every:365, due:addDays(T,-5)},
+      {id:'worm', name:'Deworming', note:'Every 3 months', every:90, due:addDays(T,60)}
+    ],
+    rem:[
+      {id:1,type:'walk',time:'06:30',on:true},{id:2,type:'food',time:'08:00',on:true},
+      {id:3,type:'water',time:'12:00',on:true},{id:4,type:'walk',time:'18:30',on:true},{id:5,type:'food',time:'19:00',on:true}
+    ],
+    day:T, fed:0, water:0, walks:0
+  };
+  if(dog.day !== T){ dog.day = T; dog.fed = 0; dog.water = 0; dog.walks = 0; }
+  const saveDog = () => store.set('rq-dog', dog);
+
+  const TYPES = {
+    food:{label:'Food', icon:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M8 8c0-1.5 1-2 1-3.5M12 8c0-1.5 1-2 1-3.5M16 8c0-1.5 1-2 1-3.5"/></svg>'},
+    water:{label:'Water', icon:'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>'},
+    walk:{label:'Walk', icon:'<svg class="paw" viewBox="0 0 64 64" aria-hidden="true"><use href="#paw"/></svg>'}
+  };
+  const GOALS = {fed:{label:'Meals',goal:2,type:'food',what:'meal'}, water:{label:'Water refills',goal:4,type:'water',what:'refill'}, walks:{label:'Walks',goal:2,type:'walk',what:'walk'}};
+
+  function renderProfile(){
+    $('#pf-name').textContent = dog.name;
+    $('#pf-meta').textContent = [dog.breed, dog.age !== '' && dog.age != null ? dog.age + ' year' + (+dog.age === 1 ? '' : 's') : '', dog.weight ? dog.weight + ' kg' : ''].filter(Boolean).join(' · ');
+    $('#pf-art').innerHTML = RQ.dog({fur:'#DDA46A',ear:'#B67940',snout:'#F7E6CE',collar:'#2F7FB8'});
+  }
+  function fillForm(){
+    $('#pf-in-name').value = dog.name; $('#pf-in-breed').value = dog.breed;
+    $('#pf-in-age').value = dog.age; $('#pf-in-weight').value = dog.weight;
+  }
+  $('#pf-form').addEventListener('submit', e => {
+    e.preventDefault();
+    dog.name = $('#pf-in-name').value.trim() || 'My dog';
+    dog.breed = $('#pf-in-breed').value.trim();
+    dog.age = $('#pf-in-age').value; dog.weight = $('#pf-in-weight').value;
+    saveDog(); renderProfile(); renderNext(); toast('Profile saved');
+  });
+
+  function renderTracks(){
+    $('#tracks').innerHTML = Object.entries(GOALS).map(([k,g]) => `
+      <div class="track">
+        <div class="top">${TYPES[g.type].icon}<span>${g.label}</span></div>
+        <div class="count" aria-live="polite">${dog[k]} / ${g.goal}</div>
+        <div class="meter" aria-hidden="true"><i style="width:${Math.min(100, dog[k]/g.goal*100)}%"></i></div>
+        <div class="step">
+          <button type="button" data-k="${k}" data-d="-1" aria-label="Remove one ${g.what}">−</button>
+          <button type="button" data-k="${k}" data-d="1" aria-label="Add one ${g.what}">+</button>
+        </div>
+      </div>`).join('');
+  }
+  $('#tracks').addEventListener('click', e => {
+    const b = e.target.closest('button[data-k]'); if(!b) return;
+    const k = b.dataset.k; dog[k] = Math.max(0, dog[k] + Number(b.dataset.d));
+    saveDog(); renderTracks();
+    if(dog[k] === GOALS[k].goal && b.dataset.d === '1') toast('Daily goal reached for ' + GOALS[k].label.toLowerCase());
+  });
+
+  function renderRem(){
+    const list = [...dog.rem].sort((a,b) => a.time.localeCompare(b.time));
+    $('#rlist').innerHTML = list.map(r => `
+      <li class="rrow" data-id="${r.id}">
+        <span class="ico">${TYPES[r.type].icon}</span>
+        <span class="lbl">${TYPES[r.type].label}</span>
+        <input type="time" value="${r.time}" aria-label="${TYPES[r.type].label} reminder time">
+        <label class="switch"><input type="checkbox" ${r.on?'checked':''} aria-label="${TYPES[r.type].label} reminder at ${fmtTime(r.time)} on or off"><span></span></label>
+        <button class="icon-btn" type="button" data-del aria-label="Delete ${TYPES[r.type].label} reminder at ${fmtTime(r.time)}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+      </li>`).join('') || '<li class="empty">No reminders yet. Add one below.</li>';
+    renderNext();
+  }
+  function renderNext(){
+    const el = $('#next-rem');
+    const now = new Date(); const cur = pad(now.getHours()) + ':' + pad(now.getMinutes());
+    const on = dog.rem.filter(r => r.on).sort((a,b) => a.time.localeCompare(b.time));
+    const nxt = on.find(r => r.time >= cur) || on[0];
+    el.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8M10 20a2 2 0 0 0 4 0"/></svg><span></span>';
+    el.lastChild.textContent = nxt ? 'Next for ' + dog.name + ': ' + TYPES[nxt.type].label.toLowerCase() + ' at ' + fmtTime(nxt.time) + (nxt.time < cur ? ' tomorrow' : '') : 'All reminders are off.';
+  }
+  $('#rlist').addEventListener('change', e => {
+    const row = e.target.closest('.rrow'); if(!row) return;
+    const r = dog.rem.find(x => x.id === +row.dataset.id); if(!r) return;
+    if(e.target.type === 'checkbox') r.on = e.target.checked;
+    else if(e.target.type === 'time' && e.target.value) r.time = e.target.value;
+    saveDog(); renderRem();
+  });
+  $('#rlist').addEventListener('click', e => {
+    const b = e.target.closest('[data-del]'); if(!b) return;
+    const id = +b.closest('.rrow').dataset.id;
+    dog.rem = dog.rem.filter(x => x.id !== id); saveDog(); renderRem(); toast('Reminder deleted');
+  });
+  $('#rem-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const type = $('#rem-type').value, time = $('#rem-time').value; if(!time) return;
+    dog.rem.push({id:Date.now(), type, time, on:true}); saveDog(); renderRem();
+    toast(TYPES[type].label + ' reminder added for ' + fmtTime(time));
+  });
+  let lastFired = '';
+  setInterval(() => {
+    const n = new Date(); const cur = pad(n.getHours()) + ':' + pad(n.getMinutes());
+    if(cur === lastFired) return; lastFired = cur;
+    dog.rem.filter(r => r.on && r.time === cur).forEach(r => toast('Time for ' + dog.name + "'s " + TYPES[r.type].label.toLowerCase(), 7000));
+  }, 15000);
+
+  function vstatus(due){
+    const n = daysUntil(due);
+    if(n < 0) return ['Overdue','b-over', (-n) + ' day' + (-n>1?'s':'') + ' overdue'];
+    if(n <= 14) return ['Due soon','b-pend', n === 0 ? 'Due today' : 'Due in ' + n + ' day' + (n>1?'s':'')];
+    return ['Up to date','b-avail','Next due ' + fmtDate(due)];
+  }
+  function renderVax(){
+    $('#vlist').innerHTML = dog.vax.map(v => { const s = vstatus(v.due); return `
+      <li class="vrow">
+        <div><strong>${esc(v.name)}</strong><span class="meta">${esc(v.note)}</span><div class="due">${s[2]}</div></div>
+        <span class="badge ${s[1]}">${s[0]}</span>
+        <button class="btn btn-secondary btn-sm" type="button" data-vax="${v.id}">Mark as given</button>
+      </li>`; }).join('');
+  }
+  $('#vlist').addEventListener('click', e => {
+    const b = e.target.closest('[data-vax]'); if(!b) return;
+    const v = dog.vax.find(x => x.id === b.dataset.vax);
+    v.due = addDays(todayIso(), v.every); saveDog(); renderVax();
+    toast(v.name + ' recorded. Next due ' + fmtDate(v.due));
+  });
+  fillForm(); renderProfile(); renderTracks(); renderRem(); renderVax();
+
+  /* ---------- ADOPTION ---------- */
+  let filter = 'all', onlyAvail = false;
+  const agrid = $('#adopt-grid');
+  function renderAdopt(){
+    const list = RQ.animals.filter(a => (filter === 'all' || RQ.kind(a) === filter) && (!onlyAvail || a.s === 'Available'));
+    agrid.innerHTML = list.map(RQ.cardHTML).join('') || '<div class="empty" style="grid-column:1/-1">No animals match these filters yet.</div>';
+    $('#adopt-count').textContent = list.length + ' animal' + (list.length === 1 ? '' : 's') + ' waiting';
+  }
+  $$('.filters [data-f]').forEach(b => b.addEventListener('click', () => {
+    filter = b.dataset.f; $$('.filters [data-f]').forEach(x => x.setAttribute('aria-pressed', x === b)); renderAdopt();
+  }));
+  $('#only-avail').addEventListener('change', e => { onlyAvail = e.target.checked; renderAdopt(); });
+  RQ.onRerender = () => { renderAdopt(); };
+  renderAdopt();
+
+  /* Adoption dialog */
+  const adlg = $('#adopt'); let current = null;
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-adopt]'); if(!b || b.disabled) return;
+    current = RQ.animals.find(a => a.n === b.dataset.adopt); if(!current) return;
+    const foster = current.s === 'Foster needed';
+    $('#adopt-title').textContent = (foster ? 'Foster ' : 'Adopt ') + current.n;
+    $('#adopt-sub').textContent = current.m;
+    $('#adopt-submit').textContent = foster ? 'Send foster request' : 'Send adoption request';
+    adlg.showModal();
+  });
+  $('#adopt-cancel').addEventListener('click', () => adlg.close());
+  $('#adopt-form').addEventListener('submit', e => {
+    const foster = current.s === 'Foster needed';
+    RQ.sent.add(current.n); RQ.rerender();
+    toast((foster ? 'Foster' : 'Adoption') + ' request sent for ' + current.n + '. The shelter will contact you soon.', 4500);
+    e.target.reset();
+  });
+
+  /* ---------- HELPLINE ---------- */
+  const clinics = [
+    {n:'Greenleaf Animal Hospital', d:'1.2 km', h:'Open 24 hours', all:true, s:'Emergency care, surgery'},
+    {n:'Paws & Care Clinic', d:'2.4 km', h:'8 am – 9 pm', all:false, s:'Vaccines, check-ups'},
+    {n:'Riverside Vet Centre', d:'3.8 km', h:'Open 24 hours', all:true, s:'Emergency care, X-ray'},
+    {n:'Happy Tails Veterinary', d:'5.1 km', h:'9 am – 7 pm', all:false, s:'Grooming, dental'}
+  ];
+  function renderClinics(){
+    const only = $('#only-24').checked;
+    $('#clist').innerHTML = clinics.filter(c => !only || c.all).map(c => `
+      <li class="clinic">
+        <div><strong>${c.n}</strong><span class="meta">${c.d} away · ${c.h}</span><br><span class="tag ${c.all?'b-avail':'b-foster'}">${c.s}</span></div>
+        <div class="btns">
+          <button class="btn btn-primary btn-sm" type="button" data-call="${esc(c.n)}">Call</button>
+          <a class="btn btn-secondary btn-sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.n + ' veterinary')}">Directions</a>
+        </div>
+      </li>`).join('');
+  }
+  $('#only-24').addEventListener('change', renderClinics);
+  $('#clist').addEventListener('click', e => {
+    const b = e.target.closest('[data-call]'); if(b) toast('Sample listing: add ' + b.dataset.call + "'s real phone number to enable calling", 4200);
+  });
+  renderClinics();
+
+  /* ---------- RESCUE ---------- */
+  let reports = store.get('rq-reports', []);
+  function renderReports(){
+    $('#replist').innerHTML = reports.length ? reports.map(r => `
+      <li class="rep">
+        <div class="top"><strong>${esc(r.animal)} · ${esc(r.cond)}</strong><span class="badge b-foster">Received</span></div>
+        <span class="meta">${esc(r.loc)}</span>
+        <span class="meta">Report ${r.id} · ${esc(r.when)}</span>
+      </li>`).join('') : '<li class="empty">No reports yet. Reports you send will appear here.</li>';
+  }
+  renderReports();
+  $('#rp-photo').addEventListener('change', e => {
+    const f = e.target.files[0], img = $('#rp-prev');
+    if(f){ img.src = URL.createObjectURL(f); img.classList.add('on'); } else { img.classList.remove('on'); }
+  });
+  $('#rp-geo').addEventListener('click', () => {
+    if(!navigator.geolocation){ toast('Location is not available in this browser. Type the address instead.', 4200); return; }
+    toast('Finding your location…');
+    navigator.geolocation.getCurrentPosition(
+      p => { $('#rp-loc').value = p.coords.latitude.toFixed(5) + ', ' + p.coords.longitude.toFixed(5) + ' (my location)'; toast('Location added'); },
+      () => toast('Location is blocked here. Type the address or landmark instead.', 4200),
+      {enableHighAccuracy:true, timeout:10000}
+    );
+  });
+  $('#rescue-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = 'RQ-' + (1000 + reports.length + 1);
+    reports.unshift({id, animal:$('#rp-animal').value, cond:$('#rp-cond').value, loc:$('#rp-loc').value.trim(), when:new Date().toLocaleString(undefined,{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})});
+    store.set('rq-reports', reports.slice(0,20)); reports = reports.slice(0,20);
+    renderReports(); e.target.reset(); $('#rp-prev').classList.remove('on');
+    toast('Report ' + id + ' submitted. Thank you for helping.', 4500);
+  });
+
+  /* ---------- SOUND DETECTION ---------- */
+  const cv = $('#wf'), ctx2d = cv.getContext('2d');
+  const status = $('#snd-status'), recBtn = $('#rec-btn'), recLabel = $('#rec-label');
+  let AC = null, stream = null, mr = null, chunks = [], raf = 0, timer = 0, analyser = null;
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  function clearCv(){ ctx2d.clearRect(0,0,cv.width,cv.height); }
+  function drawIdle(){
+    clearCv(); ctx2d.strokeStyle = css('--line') || '#ccc'; ctx2d.lineWidth = 3; ctx2d.beginPath(); ctx2d.moveTo(0,cv.height/2); ctx2d.lineTo(cv.width,cv.height/2); ctx2d.stroke();
+  }
+  function drawLive(){
+    const data = new Uint8Array(analyser.fftSize); analyser.getByteTimeDomainData(data);
+    clearCv(); ctx2d.lineWidth = 4; ctx2d.strokeStyle = css('--green') || '#267A59'; ctx2d.beginPath();
+    data.forEach((v,i) => { const x = i/(data.length-1)*cv.width, y = v/255*cv.height; i ? ctx2d.lineTo(x,y) : ctx2d.moveTo(x,y); });
+    ctx2d.stroke(); raf = requestAnimationFrame(drawLive);
+  }
+  function drawBuffer(ch){
+    clearCv(); const mid = cv.height/2, w = cv.width, step = Math.ceil(ch.length / w);
+    ctx2d.fillStyle = css('--blue') || '#21689C';
+    for(let x=0;x<w;x++){
+      let mn = 1, mx = -1; const s = x*step;
+      for(let j=0;j<step && s+j<ch.length;j++){ const v = ch[s+j]; if(v<mn)mn=v; if(v>mx)mx=v; }
+      const h = Math.max(2, (mx-mn)*mid*1.6); ctx2d.fillRect(x, mid-h/2, 1, h);
+    }
+  }
+  function getAC(){ AC = AC || new (window.AudioContext || window.webkitAudioContext)(); return AC; }
+
+  function fft(re, im){
+    const n = re.length;
+    for(let i=1,j=0;i<n;i++){ let bit = n>>1; for(;j&bit;bit>>=1) j ^= bit; j ^= bit; if(i<j){ let t = re[i]; re[i]=re[j]; re[j]=t; t = im[i]; im[i]=im[j]; im[j]=t; } }
+    for(let len=2;len<=n;len<<=1){
+      const ang = -2*Math.PI/len, wr = Math.cos(ang), wi = Math.sin(ang), half = len/2;
+      for(let i=0;i<n;i+=len){
+        let cr = 1, ci = 0;
+        for(let j=0;j<half;j++){
+          const a = i+j, b = a+half;
+          const vr = re[b]*cr - im[b]*ci, vi = re[b]*ci + im[b]*cr;
+          re[b] = re[a]-vr; im[b] = im[a]-vi; re[a] += vr; im[a] += vi;
+          const nc = cr*wr - ci*wi; ci = cr*wi + ci*wr; cr = nc;
+        }
+      }
+    }
+  }
+  function analyze(buf){
+    const sr = buf.sampleRate, ch = buf.getChannelData(0), N = 2048, hop = 1024, frames = [];
+    let maxRms = 0;
+    for(let i=0;i+N<=ch.length;i+=hop){ let s = 0; for(let j=0;j<N;j++) s += ch[i+j]*ch[i+j]; const r = Math.sqrt(s/N); frames.push({i, r}); if(r>maxRms) maxRms = r; }
+    if(!frames.length || maxRms < 0.008) return null;
+    const thr = Math.max(0.008, maxRms*0.25), act = frames.map(f => f.r >= thr);
+    const runs = []; let len = 0;
+    act.forEach((a,i) => { if(a) len++; else { if(len) runs.push(len); len = 0; } if(i===act.length-1 && len) runs.push(len); });
+    const secs = runs.map(l => l*hop/sr).filter(s => s >= 0.04);
+    const bursts = secs.length, avgRun = bursts ? secs.reduce((a,b)=>a+b,0)/bursts : 0;
+    const idx = frames.filter(f => f.r >= thr), stride = Math.max(1, Math.ceil(idx.length/100)), cents = [];
+    const re = new Float32Array(N), im = new Float32Array(N);
+    for(let k=0;k<idx.length;k+=stride){
+      const s = idx[k].i;
+      for(let j=0;j<N;j++){ re[j] = ch[s+j] * (0.5 - 0.5*Math.cos(2*Math.PI*j/(N-1))); im[j] = 0; }
+      fft(re, im);
+      let num = 0, den = 0;
+      for(let b=Math.floor(150*N/sr); b<Math.min(N/2, Math.floor(9000*N/sr)); b++){ const m = Math.hypot(re[b], im[b]); num += m*(b*sr/N); den += m; }
+      if(den>0) cents.push(num/den);
+    }
+    if(!cents.length) return null;
+    cents.sort((a,b)=>a-b);
+    const pitch = cents[Math.floor(cents.length/2)];
+    const g = (x,m,s) => Math.exp(-((x-m)*(x-m))/(2*s*s));
+    const sc = {
+      Dog: g(pitch,800,450) * ((bursts>=2 && avgRun<0.7) ? 1 : 0.65),
+      Cat: g(pitch,1500,550) * (avgRun>0.2 ? 1 : 0.65),
+      Bird: (1/(1+Math.exp(-(pitch-2800)/650))) * (bursts>=2 ? 1 : 0.75)
+    };
+    const total = sc.Dog + sc.Cat + sc.Bird;
+    return {duration: ch.length/sr, pitch, bursts, sc, total};
+  }
+  function showResult(r){
+    const box = $('#snd-result');
+    if(!r || r.total < 0.12){
+      box.innerHTML = '<div class="empty">No clear animal sound found. Try a louder, closer recording with less background noise.</div>'; return;
+    }
+    const pct = {}; Object.keys(r.sc).forEach(k => pct[k] = Math.round(r.sc[k]/r.total*100));
+    const top = Object.keys(pct).sort((a,b) => pct[b]-pct[a])[0];
+    const icons = {
+      Dog:'<path d="M8 6 5.5 3.5C4 5 3 8 3.5 11c.3 1.8 1.2 3 2.5 3.6M16 6l2.5-2.5C20 5 21 8 20.5 11c-.3 1.8-1.2 3-2.5 3.6"/><path d="M8 6h8v8.5a4 4 0 0 1-8 0z"/><path d="M10 10.5h.01M14 10.5h.01M11 14h2"/>',
+      Cat:'<path d="M5 4l3 3h8l3-3v9a7 7 0 0 1-14 0z"/><path d="M9.5 12h.01M14.5 12h.01M11 15l1 1 1-1"/>',
+      Bird:'<path d="M4 14c0-4 3-7 7-7 2 0 3 1 4 2l5 1-4 2c0 4-3 7-7 7-3 0-5-2-5-5z"/><path d="M14 10.5h.01"/>'
+    };
+    box.innerHTML = `
+      <div class="verdict">
+        <span class="tile t-green"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:36px;height:36px">${icons[top]}</svg></span>
+        <div><p class="meta">Most likely</p><h3>${top}</h3></div>
+      </div>
+      <div class="conf">${['Dog','Cat','Bird'].map(k => `
+        <div class="row"><span>${k}</span><div class="meter" role="img" aria-label="${k} ${pct[k]} percent"><i style="width:${pct[k]}%"></i></div><span>${pct[k]}%</span></div>`).join('')}</div>
+      <div class="facts"><span>${r.duration.toFixed(1)} s</span><span>Pitch ≈ ${Math.round(r.pitch)} Hz</span><span>${r.bursts} sound burst${r.bursts===1?'':'s'}</span></div>`;
+    box.querySelectorAll('.meter i').forEach(i => { const w = i.style.width; i.style.width = 0; requestAnimationFrame(() => requestAnimationFrame(() => i.style.width = w)); });
+  }
+  async function handleBuffer(ab){
+    status.textContent = 'Analyzing…';
+    try{
+      const buf = await getAC().decodeAudioData(ab);
+      drawBuffer(buf.getChannelData(0));
+      const r = analyze(buf); showResult(r);
+      status.textContent = r ? 'Analysis complete.' : 'Analysis complete. The clip was too quiet.';
+    }catch(err){
+      status.textContent = 'That audio could not be read. Try a different file or record again.'; drawIdle();
+    }
+  }
+  function stopTracks(){ cancelAnimationFrame(raf); clearTimeout(timer); if(stream){ stream.getTracks().forEach(t => t.stop()); stream = null; } }
+  function endRecUI(){ recBtn.classList.remove('rec-on'); recLabel.textContent = 'Start recording'; recBtn.setAttribute('aria-pressed','false'); }
+  recBtn.addEventListener('click', async () => {
+    if(mr && mr.state === 'recording'){ mr.stop(); return; }
+    if(!navigator.mediaDevices || !window.MediaRecorder){ status.textContent = 'Recording is not supported in this browser. Upload an audio file instead.'; return; }
+    try{
+      stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    }catch(err){
+      status.textContent = 'Microphone access is blocked here. Upload an audio file instead, or open this page in its own browser tab and allow the microphone.'; return;
+    }
+    const ac = getAC(); if(ac.state === 'suspended') ac.resume();
+    const src = ac.createMediaStreamSource(stream); analyser = ac.createAnalyser(); analyser.fftSize = 1024; src.connect(analyser);
+    chunks = []; mr = new MediaRecorder(stream);
+    mr.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
+    mr.onstop = async () => {
+      const type = mr.mimeType; stopTracks(); endRecUI();
+      await handleBuffer(await new Blob(chunks, {type}).arrayBuffer());
+    };
+    mr.start(); recBtn.classList.add('rec-on'); recBtn.setAttribute('aria-pressed','true'); recLabel.textContent = 'Stop recording';
+    status.textContent = 'Listening… make the animal sound now.'; drawLive();
+    timer = setTimeout(() => { if(mr && mr.state === 'recording') mr.stop(); }, 15000);
+  });
+  $('#snd-file').addEventListener('change', async e => {
+    const f = e.target.files[0]; if(!f) return;
+    if(f.size > 20*1024*1024){ status.textContent = 'That file is too large. Choose a clip under 20 MB.'; return; }
+    status.textContent = 'Reading ' + f.name + '…'; await handleBuffer(await f.arrayBuffer()); e.target.value = '';
+  });
+  drawIdle();
+
+  /* ---------- Info dialog ---------- */
+  const INFO = {
+    about:['About ResQPaws','ResQPaws connects people who care about animals with the help they need: quick answers from an AI assistant, tools for pet parents, adoption listings, and a way to report animals in distress.'],
+    contact:['Contact us','Questions or want to volunteer? Email hello@resqpaws.example and the team will get back to you.'],
+    privacy:['Privacy Policy','We only use the details you enter to help with your requests, such as your pet profile, adoption requests, and rescue reports. We never sell personal information.']
+  };
+  const idlg = $('#info');
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-info]'); if(!b) return; e.preventDefault();
+    const t = INFO[b.dataset.info]; $('#info-title').textContent = t[0]; $('#info-body').textContent = t[1]; idlg.showModal();
+  });
+  $('#info-close').addEventListener('click', () => idlg.close());
+
+  route();
+})();
+</script>
+<script>
+(function(){
+  const RQ = window.RQ, $ = RQ.$, $$ = RQ.$$, toast = RQ.toast;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  /* ---------- Language switcher (English, Tamil, Hindi, Telugu, Kannada) ---------- */
+  const I18N = {
+    en: { 'support.title':'Regional Support', 'support.subtitle':'Find veterinary hospitals, shelters, rescue centres and NGOs near you.',
+      'support.useLocation':'Use my location', 'support.allTypes':'All types', 'support.type':'Type', 'support.state':'State', 'support.city':'City',
+      'support.all':'All', 'support.search':'Search by name', 'support.noResults':'No matching centres found. Try a different filter.',
+      'type.vet':'Veterinary hospital', 'type.shelter':'Animal shelter', 'type.rescue':'Rescue center', 'type.ngo':'NGO', 'type.welfare':'Animal welfare organization' },
+    ta: { 'support.title':'பிராந்திய உதவி', 'support.subtitle':'உங்களுக்கு அருகிலுள்ள கால்நடை மருத்துவமனைகள், காப்பகங்கள், மீட்பு மையங்கள் மற்றும் தன்னார்வ அமைப்புகளைக் கண்டறியுங்கள்.',
+      'support.useLocation':'என் இருப்பிடத்தைப் பயன்படுத்து', 'support.allTypes':'அனைத்து வகைகள்', 'support.type':'வகை', 'support.state':'மாநிலம்', 'support.city':'நகரம்',
+      'support.all':'அனைத்தும்', 'support.search':'பெயர் மூலம் தேடு', 'support.noResults':'பொருந்தும் மையங்கள் இல்லை. வேறு வடிகட்டியை முயற்சிக்கவும்.',
+      'type.vet':'கால்நடை மருத்துவமனை', 'type.shelter':'விலங்கு காப்பகம்', 'type.rescue':'மீட்பு மையம்', 'type.ngo':'தன்னார்வ அமைப்பு', 'type.welfare':'விலங்கு நல அமைப்பு' },
+    hi: { 'support.title':'क्षेत्रीय सहायता', 'support.subtitle':'अपने पास के पशु चिकित्सालय, आश्रय, बचाव केंद्र और एनजीओ खोजें।',
+      'support.useLocation':'मेरी लोकेशन का उपयोग करें', 'support.allTypes':'सभी प्रकार', 'support.type':'प्रकार', 'support.state':'राज्य', 'support.city':'शहर',
+      'support.all':'सभी', 'support.search':'नाम से खोजें', 'support.noResults':'कोई मेल खाता केंद्र नहीं मिला। दूसरा फ़िल्टर आज़माएँ।',
+      'type.vet':'पशु चिकित्सालय', 'type.shelter':'पशु आश्रय', 'type.rescue':'बचाव केंद्र', 'type.ngo':'एनजीओ', 'type.welfare':'पशु कल्याण संगठन' },
+    te: { 'support.title':'ప్రాంతీయ మద్దతు', 'support.subtitle':'మీకు దగ్గరలోని పశువైద్యశాలలు, ఆశ్రయాలు, రక్షణ కేంద్రాలు మరియు ఎన్జీఓలను కనుగొనండి.',
+      'support.useLocation':'నా లొకేషన్ ఉపయోగించు', 'support.allTypes':'అన్ని రకాలు', 'support.type':'రకం', 'support.state':'రాష్ట్రం', 'support.city':'నగరం',
+      'support.all':'అన్నీ', 'support.search':'పేరుతో వెతకండి', 'support.noResults':'సరిపోలే కేంద్రాలు లేవు. వేరే ఫిల్టర్ ప్రయత్నించండి.',
+      'type.vet':'పశువైద్యశాల', 'type.shelter':'జంతు ఆశ్రయం', 'type.rescue':'రక్షణ కేంద్రం', 'type.ngo':'ఎన్జీఓ', 'type.welfare':'జంతు సంక్షేమ సంస్థ' },
+    kn: { 'support.title':'ಪ್ರಾದೇಶಿಕ ಬೆಂಬಲ', 'support.subtitle':'ನಿಮ್ಮ ಹತ್ತಿರದ ಪಶುವೈದ್ಯ ಆಸ್ಪತ್ರೆಗಳು, ಆಶ್ರಯಗಳು, ರಕ್ಷಣಾ ಕೇಂದ್ರಗಳು ಮತ್ತು ಎನ್‌ಜಿಒಗಳನ್ನು ಹುಡುಕಿ.',
+      'support.useLocation':'ನನ್ನ ಸ್ಥಳವನ್ನು ಬಳಸಿ', 'support.allTypes':'ಎಲ್ಲಾ ಪ್ರಕಾರಗಳು', 'support.type':'ಪ್ರಕಾರ', 'support.state':'ರಾಜ್ಯ', 'support.city':'ನಗರ',
+      'support.all':'ಎಲ್ಲಾ', 'support.search':'ಹೆಸರಿನ ಮೂಲಕ ಹುಡುಕಿ', 'support.noResults':'ಹೊಂದುವ ಕೇಂದ್ರಗಳಿಲ್ಲ. ಬೇರೆ ಫಿಲ್ಟರ್ ಪ್ರಯತ್ನಿಸಿ.',
+      'type.vet':'ಪಶುವೈದ್ಯ ಆಸ್ಪತ್ರೆ', 'type.shelter':'ಪ್ರಾಣಿ ಆಶ್ರಯ', 'type.rescue':'ರಕ್ಷಣಾ ಕೇಂದ್ರ', 'type.ngo':'ಎನ್‌ಜಿಒ', 'type.welfare':'ಪ್ರಾಣಿ ಕಲ್ಯಾಣ ಸಂಸ್ಥೆ' }
+  };
+  function applyLang(lang){
+    const dict = I18N[lang] || I18N.en;
+    $$('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if(dict[k]) el.textContent = dict[k]; });
+    $$('[data-i18n-ph]').forEach(el => { const k = el.dataset.i18nPh; if(dict[k]) el.placeholder = dict[k]; });
+    $$('[data-i18n-label]').forEach(el => {
+      const k = el.dataset.i18nLabel; if(!dict[k]) return;
+      const textNode = [...el.childNodes].find(n => n.nodeType === 3 && n.textContent.trim());
+      if(textNode) textNode.textContent = dict[k] + ' ';
+    });
+    document.documentElement.lang = lang;
+    localStorage.setItem('rq-lang', lang);
+  }
+  const langSel = $('#lang-select');
+  const savedLang = localStorage.getItem('rq-lang') || 'en';
+  langSel.value = savedLang; applyLang(savedLang);
+  langSel.addEventListener('change', () => applyLang(langSel.value));
+
+  /* ---------- Regional Support: sample centers, GPS distance, filters ---------- */
+  const CENTERS = [
+    {name:'Chennai Pet & Animal Hospital', type:'veterinary_hospital', city:'Chennai', state:'Tamil Nadu', lat:13.0827, lng:80.2707, phone:'+91 90000 0001', hours:'Open 24 hours'},
+    {name:'Chennai Animal Shelter', type:'animal_shelter', city:'Chennai', state:'Tamil Nadu', lat:13.09, lng:80.25, phone:'+91 90000 0002', hours:'Daily 10am–5pm'},
+    {name:'Chennai Wildlife & Animal Rescue Centre', type:'rescue_center', city:'Chennai', state:'Tamil Nadu', lat:13.05, lng:80.29, phone:'+91 90000 0003', hours:'Open 24 hours (helpline)'},
+    {name:'Friends of Animals Chennai', type:'ngo', city:'Chennai', state:'Tamil Nadu', lat:13.07, lng:80.24, phone:'+91 90000 0004', hours:'Mon–Fri 10am–5pm'},
+    {name:'Coimbatore Emergency Vet Clinic', type:'veterinary_hospital', city:'Coimbatore', state:'Tamil Nadu', lat:11.0168, lng:76.9558, phone:'+91 90000 0005', hours:'Open 24 hours'},
+    {name:'Coimbatore Animal Welfare Society', type:'welfare_org', city:'Coimbatore', state:'Tamil Nadu', lat:11.02, lng:76.96, phone:'+91 90000 0006', hours:'Mon–Fri 10am–5pm'},
+    {name:'Madurai Animal Shelter', type:'animal_shelter', city:'Madurai', state:'Tamil Nadu', lat:9.9252, lng:78.1198, phone:'+91 90000 0007', hours:'Daily 10am–5pm'},
+    {name:'Bengaluru Pet & Animal Hospital', type:'veterinary_hospital', city:'Bengaluru', state:'Karnataka', lat:12.9716, lng:77.5946, phone:'+91 90000 0008', hours:'Open 24 hours'},
+    {name:'Bengaluru Wildlife & Animal Rescue Centre', type:'rescue_center', city:'Bengaluru', state:'Karnataka', lat:12.95, lng:77.61, phone:'+91 90000 0009', hours:'Open 24 hours (helpline)'},
+    {name:'Friends of Animals Bengaluru', type:'ngo', city:'Bengaluru', state:'Karnataka', lat:13.0, lng:77.58, phone:'+91 90000 0010', hours:'Mon–Fri 10am–5pm'},
+    {name:'Mysuru Animal Shelter', type:'animal_shelter', city:'Mysuru', state:'Karnataka', lat:12.2958, lng:76.6394, phone:'+91 90000 0011', hours:'Daily 10am–5pm'},
+    {name:'Hyderabad Pet & Animal Hospital', type:'veterinary_hospital', city:'Hyderabad', state:'Telangana', lat:17.385, lng:78.4867, phone:'+91 90000 0012', hours:'Open 24 hours'},
+    {name:'Hyderabad Animal Welfare Society', type:'welfare_org', city:'Hyderabad', state:'Telangana', lat:17.4, lng:78.47, phone:'+91 90000 0013', hours:'Mon–Fri 10am–5pm'},
+    {name:'Friends of Animals Hyderabad', type:'ngo', city:'Hyderabad', state:'Telangana', lat:17.37, lng:78.5, phone:'+91 90000 0014', hours:'Mon–Fri 10am–5pm'},
+    {name:'Visakhapatnam Animal Shelter', type:'animal_shelter', city:'Visakhapatnam', state:'Andhra Pradesh', lat:17.6868, lng:83.2185, phone:'+91 90000 0015', hours:'Daily 10am–5pm'},
+    {name:'Vijayawada Emergency Vet Clinic', type:'veterinary_hospital', city:'Vijayawada', state:'Andhra Pradesh', lat:16.5062, lng:80.648, phone:'+91 90000 0016', hours:'Open 24 hours'},
+    {name:'New Delhi Pet & Animal Hospital', type:'veterinary_hospital', city:'New Delhi', state:'Delhi', lat:28.6139, lng:77.209, phone:'+91 90000 0017', hours:'Open 24 hours'},
+    {name:'Delhi Wildlife & Animal Rescue Centre', type:'rescue_center', city:'New Delhi', state:'Delhi', lat:28.63, lng:77.22, phone:'+91 90000 0018', hours:'Open 24 hours (helpline)'},
+    {name:'Mumbai Pet & Animal Hospital', type:'veterinary_hospital', city:'Mumbai', state:'Maharashtra', lat:19.076, lng:72.8777, phone:'+91 90000 0019', hours:'Open 24 hours'},
+    {name:'Mumbai Animal Shelter', type:'animal_shelter', city:'Mumbai', state:'Maharashtra', lat:19.09, lng:72.86, phone:'+91 90000 0020', hours:'Daily 10am–5pm'},
+    {name:'Pune Animal Welfare Society', type:'welfare_org', city:'Pune', state:'Maharashtra', lat:18.5204, lng:73.8567, phone:'+91 90000 0021', hours:'Mon–Fri 10am–5pm'}
+  ];
+  const TYPE_TONE = {veterinary_hospital:'b-avail', animal_shelter:'b-foster', rescue_center:'b-pend', ngo:'b-foster', welfare_org:'b-avail'};
+  const TYPE_LABEL_KEY = {veterinary_hospital:'type.vet', animal_shelter:'type.shelter', rescue_center:'type.rescue', ngo:'type.ngo', welfare_org:'type.welfare'};
+
+  const stateSel = $('#sup-state'), citySel = $('#sup-city'), typeSel = $('#sup-type'), qInput = $('#sup-q');
+  [...new Set(CENTERS.map(c => c.state))].sort().forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; stateSel.appendChild(o); });
+  function refreshCities(){
+    citySel.innerHTML = '<option value="">' + (I18N[langSel.value]||I18N.en)['support.all'] + '</option>';
+    const cities = [...new Set(CENTERS.filter(c => !stateSel.value || c.state === stateSel.value).map(c => c.city))].sort();
+    cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; citySel.appendChild(o); });
+  }
+  refreshCities();
+
+  let userPos = null;
+  const haversine = (lat1, lng1, lat2, lng2) => {
+    const R = 6371, toRad = d => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  };
+
+  function renderSupport(){
+    const dict = I18N[langSel.value] || I18N.en;
+    let items = CENTERS.filter(c =>
+      (!typeSel.value || c.type === typeSel.value) &&
+      (!stateSel.value || c.state === stateSel.value) &&
+      (!citySel.value || c.city === citySel.value) &&
+      (!qInput.value.trim() || c.name.toLowerCase().includes(qInput.value.trim().toLowerCase()))
+    );
+    items = items.map(c => ({...c, dist: userPos ? haversine(userPos.lat, userPos.lng, c.lat, c.lng) : null}));
+    if(userPos) items.sort((a,b) => a.dist - b.dist);
+    $('#sup-list').innerHTML = items.map(c => `
+      <article class="center-card">
+        <span class="kind badge ${TYPE_TONE[c.type]}">${dict[TYPE_LABEL_KEY[c.type]]}</span>
+        <h3>${esc(c.name)}</h3>
+        <p class="meta">${esc(c.city)}, ${esc(c.state)}</p>
+        <p class="meta">${esc(c.hours)}</p>
+        ${c.dist !== null ? `<p class="dist">${c.dist.toFixed(1)} km away</p>` : ''}
+        <div class="row2">
+          <a class="btn btn-secondary btn-sm" href="tel:${c.phone.replace(/\\s+/g,'')}">Call</a>
+          <a class="btn btn-secondary btn-sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}">Directions</a>
+        </div>
+      </article>`).join('');
+    $('#sup-empty').hidden = items.length > 0;
+  }
+  [typeSel, citySel, qInput].forEach(el => el.addEventListener('input', renderSupport));
+  stateSel.addEventListener('change', () => { refreshCities(); renderSupport(); });
+  langSel.addEventListener('change', renderSupport);
+
+  $('#sup-geo').addEventListener('click', () => {
+    if(!navigator.geolocation){ $('#sup-status').textContent = 'Location is not available in this browser.'; return; }
+    $('#sup-status').textContent = 'Finding your location…';
+    navigator.geolocation.getCurrentPosition(
+      p => { userPos = {lat:p.coords.latitude, lng:p.coords.longitude}; $('#sup-status').textContent = 'Showing distances from your current location.'; renderSupport(); toast('Location added — sorted by distance'); },
+      () => { $('#sup-status').textContent = 'Location permission was denied. Use the filters below instead.'; },
+      {enableHighAccuracy:true, timeout:10000}
+    );
+  });
+
+  renderSupport();
+})();
+</script>
+</body>
+</html>
